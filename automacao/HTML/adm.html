@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin | Pasqualino</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="../CSS/adm2.css">
+</head>
+<body>
+
+<header class="topo">
+  <div class="logo-box">
+    <img src="../imagens/LOGO OFICIAL.png" alt="Pasqualino">
+  </div>
+
+  <div class="admin-info">Admin Pasqualino</div>
+
+  <button class="btn-principal" id="btnAtualizar">
+    Atualizar notícias
+  </button>
+</header>
+
+<div class="conteudo">
+
+  <!-- TABS -->
+<div class="tabs">
+  <div class="tab active" data-tab="pendentes">Pendentes</div>
+  <div class="tab" data-tab="publicadas">Publicadas</div>
+</div>
+<section class="tab-content active" id="pendentes">
+  <div class="lista-noticias" id="lista-pendentes"></div>
+</section>
+
+<section class="tab-content" id="publicadas">
+  <div class="lista-noticias" id="lista-publicadas"></div>
+</section>
+
+  <!-- PENDENTES -->
+  <section class="lista-noticias tab-content active" id="pendentes">
+  </section>
+
+  <!-- PUBLICADAS -->
+  <section class="lista-noticias tab-content" id="publicadas">
+  </section>
+
+</div>
+
+<!-- OVERLAY -->
+<div class="overlay" id="overlay"></div>
+
+<!-- MODAL -->
+<div class="editor" id="modal">
+  <h2 id="modalTitulo"></h2>
+  <div id="modalTexto"></div>
+
+  <div class="editor-acoes">
+    <button class="btn-secundario" id="btnFecharModal">
+      Fechar
+    </button>
+  </div>
+</div>
+
+<script src="../JS/admin-tabs.js"></script>
+<script src="../JS/admin-noticias.js"></script>
+<script src="../JS/pipeline.js"></script>
+</body>
+</html>
