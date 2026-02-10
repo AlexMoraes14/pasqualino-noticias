@@ -1,0 +1,16 @@
+# Ambiente
+.env
+.env.local
+**/.env
+**/.env.local
+
+# WordPress
+wordpress/wp-config.php
+
+# Logs / dependências
+node_modules/
+logs/
+
+# Sistema
+.DS_Store
+Thumbs.db

@@ -1,0 +1,310 @@
+...[2026-01-28 19:46:53] PIPELINE START
+[2026-01-28 19:46:53] PIPELINE END - sucesso
+[2026-01-28 19:46:53] PIPELINE START
+[2026-01-28 19:46:53] SCRAP: iniciando
+[2026-01-28 19:46:53] SCRAP: 8 notícias carregadas
+[2026-01-28 19:46:53] IA: iniciando
+[2026-01-28 19:46:53] IA: textos reformulados
+[2026-01-28 19:46:54] WP: 0 criados | 8 atualizados | 0 ignorados
+[2026-01-28 19:46:54] PIPELINE END
+[2026-01-29 13:47:57] PIPELINE START
+[2026-01-29 13:47:57] SCRAP: iniciando
+[2026-01-29 13:47:57] SCRAP: 7 notícias coletadas
+[2026-01-29 13:47:57] IA: 7 textos reformulados
+[2026-01-29 13:47:58] WP: 2 criados | 5 atualizados | 0 ignorados
+[2026-01-29 13:47:58] PIPELINE END
+[2026-01-29 16:24:14] PIPELINE START
+[2026-01-29 16:24:14] SCRAP: iniciando
+[2026-01-29 16:24:15] SCRAP: 9 notícias coletadas
+[2026-01-29 16:24:15] IA: 9 textos reformulados
+[2026-01-29 16:24:15] ERRO: Call to undefined function is_user_logged_in()
+[2026-01-29 16:24:17] PIPELINE START
+[2026-01-29 16:24:17] SCRAP: iniciando
+[2026-01-29 16:24:17] SCRAP: 9 notícias coletadas
+[2026-01-29 16:24:17] IA: 9 textos reformulados
+[2026-01-29 16:24:17] ERRO: Undefined constant "WP_POST_REVISIONS"
+[START]
+[START]
+[START]
+[START]
+[START]
+[START]
+[START]
+[START]
+[START]
+[START]
+[START]
+[START]
+[2026-01-30 15:36:00] PIPELINE START
+[2026-01-30 15:36:00] SCRAP: iniciando
+[2026-01-30 15:36:00] SCRAP: 10 notícias coletadas
+[2026-01-30 15:36:00] IA: 10 textos reformulados
+[2026-01-30 15:36:01] WP: 0 criados | 10 atualizados | 0 ignorados
+[2026-01-30 15:36:01] PIPELINE END
+[2026-01-30 15:36:45] PIPELINE START
+[2026-01-30 15:36:45] SCRAP: iniciando
+[2026-01-30 15:36:45] SCRAP: 10 notícias coletadas
+[2026-01-30 15:36:45] IA: 10 textos reformulados
+[2026-01-30 15:36:45] WP: 0 criados | 10 atualizados | 0 ignorados
+[2026-01-30 15:36:45] PIPELINE END
+[2026-01-30 15:42:14] PIPELINE START
+[2026-01-30 15:42:14] SCRAP: iniciando
+[2026-01-30 15:42:15] SCRAP: 10 notícias coletadas
+[2026-01-30 15:42:15] IA: 10 textos reformulados
+[2026-01-30 15:42:15] WP: 0 criados | 10 atualizados | 0 ignorados
+[2026-01-30 15:42:15] PIPELINE END
+[2026-02-02 14:15:31] PIPELINE START
+[2026-02-02 14:15:31] SCRAP: iniciando
+[2026-02-02 14:15:31] SCRAP: 10 notícias coletadas
+[2026-02-02 14:15:31] IA: 10 textos reformulados
+[2026-02-02 14:15:31] WP: 1 criados | 9 atualizados | 0 ignorados
+[2026-02-02 14:15:31] PIPELINE END
+[2026-02-02 14:26:36] PIPELINE START
+[2026-02-02 14:26:36] SCRAP: iniciando
+[2026-02-02 14:26:37] SCRAP: 10 notícias coletadas
+[2026-02-02 14:26:37] IA: 10 textos reformulados
+[2026-02-02 14:26:37] WP: 0 criados | 10 atualizados | 0 ignorados
+[2026-02-02 14:26:37] PIPELINE END
+[2026-02-02 14:30:14] PIPELINE START
+[2026-02-02 14:30:14] SCRAP: iniciando
+[2026-02-02 14:30:14] SCRAP: 10 notícias coletadas
+[2026-02-02 14:30:14] IA: 10 textos reformulados
+[2026-02-02 14:30:14] WP: 0 criados | 10 atualizados | 0 ignorados
+[2026-02-02 14:30:14] PIPELINE END
+[2026-02-02 14:33:19] PIPELINE START
+[2026-02-02 14:33:19] SCRAP: iniciando
+[2026-02-02 14:33:20] SCRAP: 10 notícias coletadas
+[2026-02-02 14:33:20] IA: 10 textos reformulados
+[2026-02-02 14:33:20] WP: 0 criados | 10 atualizados | 0 ignorados
+[2026-02-02 14:33:20] PIPELINE END
+[2026-02-02 14:46:09] PIPELINE START
+[2026-02-02 14:46:09] SCRAP: iniciando
+[2026-02-02 14:46:10] SCRAP: 10 notícias coletadas
+[2026-02-02 14:46:10] IA: 10 textos reformulados
+[2026-02-02 14:46:10] WP: 0 criados | 10 atualizados | 0 ignorados
+[2026-02-02 14:46:10] PIPELINE END
+[2026-02-02 14:46:20] PIPELINE START
+[2026-02-02 14:46:20] SCRAP: iniciando
+[2026-02-02 14:46:20] SCRAP: 10 notícias coletadas
+[2026-02-02 14:46:20] IA: 10 textos reformulados
+[2026-02-02 14:46:20] WP: 0 criados | 10 atualizados | 0 ignorados
+[2026-02-02 14:46:20] PIPELINE END
+[2026-02-02 14:46:22] PIPELINE START
+[2026-02-02 14:46:22] SCRAP: iniciando
+[2026-02-02 14:46:22] SCRAP: 10 notícias coletadas
+[2026-02-02 14:46:22] IA: 10 textos reformulados
+[2026-02-02 14:46:22] WP: 0 criados | 10 atualizados | 0 ignorados
+[2026-02-02 14:46:22] PIPELINE END
+[2026-02-02 14:46:23] PIPELINE START
+[2026-02-02 14:46:23] SCRAP: iniciando
+[2026-02-02 14:46:23] SCRAP: 10 notícias coletadas
+[2026-02-02 14:46:23] IA: 10 textos reformulados
+[2026-02-02 14:46:23] WP: 0 criados | 10 atualizados | 0 ignorados
+[2026-02-02 14:46:23] PIPELINE END
+[2026-02-02 14:46:25] PIPELINE START
+[2026-02-02 14:46:25] SCRAP: iniciando
+[2026-02-02 14:46:25] SCRAP: 10 notícias coletadas
+[2026-02-02 14:46:25] IA: 10 textos reformulados
+[2026-02-02 14:46:25] WP: 0 criados | 10 atualizados | 0 ignorados
+[2026-02-02 14:46:25] PIPELINE END
+[2026-02-02 14:56:41] PIPELINE START
+[2026-02-02 14:56:42] WP: 10 rascunhos | 0 ignorados
+[2026-02-02 14:56:42] PIPELINE END
+[2026-02-02 14:57:19] PIPELINE START
+[2026-02-02 14:57:19] WP: 10 rascunhos | 0 ignorados
+[2026-02-02 14:57:19] PIPELINE END
+[2026-02-02 15:01:38] PIPELINE START
+[2026-02-02 15:01:38] WP: 10 rascunhos | 0 ignorados
+[2026-02-02 15:01:38] PIPELINE END
+[2026-02-02 15:05:49] PIPELINE START
+[2026-02-02 15:05:50] WP: 10 rascunhos | 0 ignorados
+[2026-02-02 15:05:50] PIPELINE END
+[2026-02-02 15:09:12] PIPELINE START
+[2026-02-02 15:09:12] WP: 10 rascunhos | 0 ignorados
+[2026-02-02 15:09:12] PIPELINE END
+[2026-02-02 15:12:04] PIPELINE START
+[2026-02-02 15:12:04] WP: 10 rascunhos | 0 ignorados
+[2026-02-02 15:12:04] PIPELINE END
+[2026-02-02 15:17:38] PIPELINE START
+[2026-02-02 15:17:38] WP: 10 rascunhos | 0 ignorados
+[2026-02-02 15:17:38] PIPELINE END
+[2026-02-02 15:19:30] PIPELINE START
+[2026-02-02 15:19:31] WP: 10 rascunhos | 0 ignorados
+[2026-02-02 15:19:31] PIPELINE END
+[2026-02-02 15:26:38] PIPELINE START
+[2026-02-02 15:26:39] WP: 10 rascunhos | 0 ignorados
+[2026-02-02 15:26:39] PIPELINE END
+[2026-02-02 16:00:00] PIPELINE START
+[2026-02-02 16:00:00] WP: 0 rascunhos | 0 ignorados
+[2026-02-02 16:00:00] PIPELINE END
+[2026-02-02 16:13:47] PIPELINE START
+[2026-02-02 16:13:47] WP:  rascunhos | 0 ignorados
+[2026-02-02 16:13:47] PIPELINE END
+[2026-02-02 16:16:59] PIPELINE START
+[2026-02-02 16:16:59] WP:  rascunhos | 0 ignorados
+[2026-02-02 16:16:59] PIPELINE END
+[2026-02-02 16:17:46] PIPELINE START
+[2026-02-02 16:17:46] WP:  rascunhos | 0 ignorados
+[2026-02-02 16:17:46] PIPELINE END
+[2026-02-02 16:18:04] PIPELINE START
+[2026-02-02 16:18:04] WP:  rascunhos | 0 ignorados
+[2026-02-02 16:18:04] PIPELINE END
+[2026-02-02 16:23:31] PIPELINE START
+[2026-02-02 16:23:31] WP: 0 criados | 10 atualizados | 0 ignorados
+[2026-02-02 16:23:31] PIPELINE END
+[2026-02-02 16:24:05] PIPELINE START
+[2026-02-02 16:24:06] WP: 0 criados | 10 atualizados | 0 ignorados
+[2026-02-02 16:24:06] PIPELINE END
+[2026-02-02 16:32:57] PIPELINE START
+[2026-02-02 16:32:57] WP: 0 criados | 10 atualizados | 0 ignorados
+[2026-02-02 16:32:57] PIPELINE END
+[2026-02-02 16:33:02] PIPELINE START
+[2026-02-02 16:33:02] WP: 0 criados | 10 atualizados | 0 ignorados
+[2026-02-02 16:33:02] PIPELINE END
+[2026-02-02 16:33:03] PIPELINE START
+[2026-02-02 16:33:04] WP: 0 criados | 10 atualizados | 0 ignorados
+[2026-02-02 16:33:04] PIPELINE END
+[2026-02-02 16:38:44] PIPELINE START
+[2026-02-02 16:38:45] WP: 0 criados | 10 atualizados | 0 ignorados
+[2026-02-02 16:38:45] PIPELINE END
+[2026-02-02 16:49:58] PIPELINE START
+[2026-02-02 16:49:59] WP: 0 criados | 10 atualizados | 0 ignorados
+[2026-02-02 16:49:59] PIPELINE END
+[2026-02-02 16:50:22] PIPELINE START
+[2026-02-02 16:50:22] WP: 0 criados | 10 atualizados | 0 ignorados
+[2026-02-02 16:50:22] PIPELINE END
+[2026-02-03 08:59:39] PIPELINE START
+[2026-02-03 08:59:40] WP: 0 criados | 10 atualizados | 0 ignorados
+[2026-02-03 08:59:40] PIPELINE END
+[2026-02-03 09:02:43] PIPELINE START
+[2026-02-03 09:02:44] WP: 0 criadas | 10 atualizados | 0 ignorados
+[2026-02-03 09:02:44] PIPELINE END
+[2026-02-03 09:02:47] PIPELINE START
+[2026-02-03 09:02:48] WP: 0 criadas | 10 atualizados | 0 ignorados
+[2026-02-03 09:02:48] PIPELINE END
+[2026-02-03 09:05:04] PIPELINE START
+[2026-02-03 09:05:04] WP: 0 criadas | 10 atualizados | 0 ignorados
+[2026-02-03 09:05:04] PIPELINE END
+[2026-02-03 09:05:06] PIPELINE START
+[2026-02-03 09:05:06] WP: 0 criadas | 10 atualizados | 0 ignorados
+[2026-02-03 09:05:06] PIPELINE END
+[2026-02-03 09:05:26] PIPELINE START
+[2026-02-03 09:05:27] WP: 0 criadas | 10 atualizados | 0 ignorados
+[2026-02-03 09:05:27] PIPELINE END
+[2026-02-03 09:12:50] PIPELINE START
+[2026-02-03 09:12:50] WP: 0 criadas | 10 atualizados | 0 ignorados
+[2026-02-03 09:12:50] PIPELINE END
+[2026-02-03 09:26:19] PIPELINE START
+[2026-02-03 09:26:19] WP: 0 criadas | 10 atualizadas | 0 ignoradas
+[2026-02-03 09:26:19] PIPELINE END
+[2026-02-03 09:26:23] PIPELINE START
+[2026-02-03 09:26:24] WP: 0 criadas | 10 atualizadas | 0 ignoradas
+[2026-02-03 09:26:24] PIPELINE END
+[2026-02-03 09:26:25] PIPELINE START
+[2026-02-03 09:26:26] WP: 0 criadas | 10 atualizadas | 0 ignoradas
+[2026-02-03 09:26:26] PIPELINE END
+[2026-02-03 09:26:27] PIPELINE START
+[2026-02-03 09:26:28] WP: 0 criadas | 10 atualizadas | 0 ignoradas
+[2026-02-03 09:26:28] PIPELINE END
+[2026-02-03 09:27:59] PIPELINE START
+[2026-02-03 09:27:59] WP: 10 criadas | 0 atualizadas | 0 ignoradas
+[2026-02-03 09:27:59] PIPELINE END
+[2026-02-03 09:28:20] PIPELINE START
+[2026-02-03 09:28:20] WP: 0 criadas | 10 atualizadas | 0 ignoradas
+[2026-02-03 09:28:20] PIPELINE END
+[2026-02-03 09:37:52] PIPELINE START
+[2026-02-03 09:37:52] WP: 0 criadas | 10 atualizadas | 0 ignoradas
+[2026-02-03 09:37:52] PIPELINE END
+[2026-02-03 09:37:57] PIPELINE START
+[2026-02-03 09:37:58] WP: 0 criadas | 10 atualizadas | 0 ignoradas
+[2026-02-03 09:37:58] PIPELINE END
+[2026-02-03 09:38:27] PIPELINE START
+[2026-02-03 09:38:28] WP: 0 criadas | 10 atualizadas | 0 ignoradas
+[2026-02-03 09:38:28] PIPELINE END
+[2026-02-03 09:55:03] PIPELINE START
+[2026-02-03 09:55:03] WP: 0 criadas | 10 atualizadas | 0 ignoradas
+[2026-02-03 09:55:03] PIPELINE END
+[2026-02-03 09:55:05] PIPELINE START
+[2026-02-03 09:55:05] WP: 0 criadas | 10 atualizadas | 0 ignoradas
+[2026-02-03 09:55:05] PIPELINE END
+[2026-02-03 09:55:06] PIPELINE START
+[2026-02-03 09:55:06] WP: 0 criadas | 10 atualizadas | 0 ignoradas
+[2026-02-03 09:55:06] PIPELINE END
+[2026-02-03 09:55:07] PIPELINE START
+[2026-02-03 09:55:08] WP: 0 criadas | 10 atualizadas | 0 ignoradas
+[2026-02-03 09:55:08] PIPELINE END
+[2026-02-03 09:55:08] PIPELINE START
+[2026-02-03 09:55:08] WP: 0 criadas | 10 atualizadas | 0 ignoradas
+[2026-02-03 09:55:08] PIPELINE END
+[2026-02-03 09:55:17] PIPELINE START
+[2026-02-03 09:55:18] WP: 0 criadas | 10 atualizadas | 0 ignoradas
+[2026-02-03 09:55:18] PIPELINE END
+[2026-02-03 09:58:45] PIPELINE START
+[2026-02-03 09:58:45] WP: 0 criadas | 10 atualizadas | 0 ignoradas
+[2026-02-03 09:58:45] PIPELINE END
+[2026-02-03 09:58:59] PIPELINE START
+[2026-02-03 09:59:00] WP: 0 criadas | 10 atualizadas | 0 ignoradas
+[2026-02-03 09:59:00] PIPELINE END
+[2026-02-03 10:07:08] PIPELINE START
+[2026-02-03 10:07:10] WP: 0 criadas | 10 atualizadas | 0 ignoradas
+[2026-02-03 10:07:10] PIPELINE END
+[2026-02-03 10:08:17] PIPELINE START
+[2026-02-03 10:08:18] WP: 0 criadas | 10 atualizadas | 0 ignoradas
+[2026-02-03 10:08:18] PIPELINE END
+[2026-02-03 10:08:19] PIPELINE START
+[2026-02-03 10:08:20] WP: 0 criadas | 10 atualizadas | 0 ignoradas
+[2026-02-03 10:08:20] PIPELINE END
+[2026-02-03 10:08:20] PIPELINE START
+[2026-02-03 10:08:21] WP: 0 criadas | 10 atualizadas | 0 ignoradas
+[2026-02-03 10:08:21] PIPELINE END
+[2026-02-03 10:08:39] PIPELINE START
+[2026-02-03 10:08:40] WP: 10 criadas | 0 atualizadas | 0 ignoradas
+[2026-02-03 10:08:40] PIPELINE END
+[2026-02-03 10:09:26] PIPELINE START
+[2026-02-03 10:09:28] WP: 10 criadas | 0 atualizadas | 0 ignoradas
+[2026-02-03 10:09:28] PIPELINE END
+[2026-02-03 10:59:32] PIPELINE START
+[2026-02-03 10:59:32] WP: 0 criadas | 10 atualizadas | 0 ignoradas
+[2026-02-03 10:59:32] PIPELINE END
+[2026-02-03 10:59:34] PIPELINE START
+[2026-02-03 10:59:34] WP: 0 criadas | 10 atualizadas | 0 ignoradas
+[2026-02-03 10:59:34] PIPELINE END
+[2026-02-03 11:00:26] PIPELINE START
+[2026-02-03 11:00:27] WP: 0 criadas | 10 atualizadas | 0 ignoradas
+[2026-02-03 11:00:27] PIPELINE END
+[2026-02-03 11:00:46] PIPELINE START
+[2026-02-03 11:00:46] WP: 0 criadas | 10 atualizadas | 0 ignoradas
+[2026-02-03 11:00:46] PIPELINE END
+[2026-02-03 11:01:02] PIPELINE START
+[2026-02-03 11:01:03] WP: 0 criadas | 10 atualizadas | 0 ignoradas
+[2026-02-03 11:01:03] PIPELINE END
+[2026-02-03 11:01:04] PIPELINE START
+[2026-02-03 11:01:04] WP: 0 criadas | 10 atualizadas | 0 ignoradas
+[2026-02-03 11:01:04] PIPELINE END
+[2026-02-04 11:19:16] PIPELINE START
+[2026-02-04 11:19:17] WP: 2 criadas | 8 atualizadas | 0 ignoradas
+[2026-02-04 11:19:17] PIPELINE END
+[2026-02-04 16:58:05] PIPELINE START
+[2026-02-04 16:58:05] WP: 0 criadas | 10 atualizadas | 0 ignoradas
+[2026-02-04 16:58:05] PIPELINE END
+[2026-02-05 08:42:04] PIPELINE START
+[2026-02-05 08:42:04] WP: 5 criadas | 4 atualizadas | 1 ignoradas
+[2026-02-05 08:42:04] PIPELINE END
+[2026-02-06 10:11:24] PIPELINE START
+[2026-02-06 10:11:25] WP: 0 criadas | 8 atualizadas | 0 ignoradas
+[2026-02-06 10:11:25] PIPELINE END
+[2026-02-09 16:09:17] PIPELINE START
+[2026-02-09 16:09:17] WP: 5 criadas | 5 atualizadas | 0 ignoradas
+[2026-02-09 16:09:17] PIPELINE END
+[2026-02-09 16:26:06] PIPELINE START
+[2026-02-09 16:26:07] WP: 0 criadas | 10 atualizadas | 0 ignoradas
+[2026-02-09 16:26:07] PIPELINE END
+[2026-02-09 17:01:48] PIPELINE START
+[2026-02-09 17:01:48] WP: 0 criadas | 10 atualizadas | 0 ignoradas
+[2026-02-09 17:01:48] PIPELINE END
+[2026-02-09 17:11:42] PIPELINE START
+[2026-02-09 17:11:42] WP: 0 criadas | 10 atualizadas | 0 ignoradas
+[2026-02-09 17:11:42] PIPELINE END
+[2026-02-09 17:33:28] PIPELINE START
+[2026-02-09 17:33:29] WP: 0 criadas | 10 atualizadas | 0 ignoradas
+[2026-02-09 17:33:29] PIPELINE END
