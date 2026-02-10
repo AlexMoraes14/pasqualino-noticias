@@ -1,0 +1,14 @@
+# Logs
+automacao/logs/
+*.log
+
+# WordPress server config
+wordpress/.htaccess
+
+# Ambiente
+.env
+.env.local
+.env.example
+
+# WordPress config
+wordpress/wp-config.php
