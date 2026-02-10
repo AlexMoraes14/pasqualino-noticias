@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Workspace Pasqualino</title>
+  <link rel="stylesheet" href="../CSS/index.css">
+</head>
+<body>
+
+<div class="container">
+  <div class="card">
+
+    <!-- LOGO -->
+    <div class="logo-container">
+      <img src="../imagens/LOGO OFICIAL.png" alt="Logo Pasqualino">
+    </div>
+
+    <!-- EMAIL -->
+    <input 
+      id="email"
+      type="email"
+      placeholder="Digite seu e-mail (@pasqualino.com.br)"
+      pattern=".+@pasqualino\.com(\.br)?"
+      required
+    >
+
+    <!-- DEPARTAMENTO -->
+    <select required>
+      <option value="">Selecione seu departamento</option>
+      <option>Auxiliar Administrativo</option>
+      <option>CMR</option>
+      <option>Contábil</option>
+      <option>CS</option>
+      <option>Departamento Pessoal</option>
+      <option>Financeiro</option>
+      <option>Fiscal</option>
+      <option>Legalização</option>
+      <option>Marketing</option>
+      <option>RH</option>
+      <option>T.I</option>
+    </select>
+
+    <!-- BOTÃO USUÁRIO -->
+    <a href="noticias.html" class="btn-primary">
+      Entrar
+    </a>
+
+    <!-- BOTÃO ADMIN -->
+    <button class="btn-primary btn-admin" onclick="entrarAdmin()">
+      Entrar como admin
+    </button>
+
+  </div>
+</div>
+
+<!-- BOTÃO CONTATO -->
+<a class="contato btn-secondary" href="contato.html">
+  Entre em contato
+</a>
+
+<script>
+function entrarAdmin() {
+  const email = document.getElementById('email').value.trim().toLowerCase();
+
+  const admins = [
+    'pedrobirolim@pasqualino.com.br',
+    'alexsandromoraes@pasqualino.com.br',
+    'murilo@pasqualino.com.br'
+  ];
+
+  if (!email) {
+    alert('Digite seu e-mail corporativo.');
+    return;
+  }
+
+  if (!admins.includes(email)) {
+    alert('Apenas os mais brabos podem acessar essa área.');
+    return;
+  }
+
+  window.location.href = 'adm.html';
+}
+</script>
+
+</body>
+</html>

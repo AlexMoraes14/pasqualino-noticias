@@ -1,0 +1,22 @@
+body {
+  background: linear-gradient(135deg, #112a4f, #D31882);
+  font-family: Arial;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.box {
+  background: white;
+  padding: 40px;
+  border-radius: 20px;
+}
+
+.voltar {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  color: white;
+  text-decoration: none;
+}
