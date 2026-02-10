@@ -1,3 +1,4 @@
+ HEAD
 # Ambiente
 .env
 .env.local
@@ -14,3 +15,19 @@ logs/
 # Sistema
 .DS_Store
 Thumbs.db
+
+# Logs
+automacao/logs/
+*.log
+
+# WordPress server config
+wordpress/.htaccess
+
+# Ambiente
+.env
+.env.local
+.env.example
+
+# WordPress config
+wordpress/wp-config.php
+ 3e4f8d9e8fd61ecdebe80103792c8eaefef42a35

@@ -166,3 +166,32 @@ if ( ! function_exists( 'twentytwentyfive_format_binding' ) ) :
 endif;
 add_filter('wp_is_application_passwords_available', '__return_true');
 
+
+
+add_action('init', function () {
+
+    register_post_meta('post', '_conteudo_ia', [
+        'type'              => 'string',
+        'single'            => true,
+        'show_in_rest'      => true,
+        'sanitize_callback' => 'sanitize_text_field',
+        'auth_callback'     => function () {
+            return current_user_can('edit_posts');
+        }
+    ]);
+
+});
+
+/**
+ * Libera edição manual de meta protegida (_*)
+ */
+add_filter('is_protected_meta', function ($protected, $meta_key) {
+    if ($meta_key === '_conteudo_ia') {
+        return false;
+    }
+    return $protected;
+}, 10, 2);
+
+
+
+
