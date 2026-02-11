@@ -9,14 +9,11 @@
 
 <div class="container">
   <div class="card">
-
-    <!-- LOGO -->
     <div class="logo-container">
-      <img src="../imagens/LOGO OFICIAL.png" alt="Logo Pasqualino">
+      <img src="../imagens/logo-oficial.png" alt="Logo Pasqualino">
     </div>
 
-    <!-- EMAIL -->
-    <input 
+    <input
       id="email"
       type="email"
       placeholder="Digite seu e-mail (@pasqualino.com.br)"
@@ -24,61 +21,68 @@
       required
     >
 
-    <!-- DEPARTAMENTO -->
     <select required>
       <option value="">Selecione seu departamento</option>
       <option>Auxiliar Administrativo</option>
       <option>CMR</option>
-      <option>Contábil</option>
+      <option>Contabil</option>
       <option>CS</option>
       <option>Departamento Pessoal</option>
       <option>Financeiro</option>
       <option>Fiscal</option>
-      <option>Legalização</option>
+      <option>Legalizacao</option>
       <option>Marketing</option>
       <option>RH</option>
       <option>T.I</option>
     </select>
 
-    <!-- BOTÃO USUÁRIO -->
     <a href="noticias.html" class="btn-primary">
       Entrar
     </a>
 
-    <!-- BOTÃO ADMIN -->
     <button class="btn-primary btn-admin" onclick="entrarAdmin()">
       Entrar como admin
     </button>
-
   </div>
 </div>
 
-<!-- BOTÃO CONTATO -->
 <a class="contato btn-secondary" href="contato.html">
   Entre em contato
 </a>
 
 <script>
-function entrarAdmin() {
+async function entrarAdmin() {
   const email = document.getElementById('email').value.trim().toLowerCase();
-
-  const admins = [
-    'pedrobirolim@pasqualino.com.br',
-    'alexsandromoraes@pasqualino.com.br',
-    'murilo@pasqualino.com.br'
-  ];
 
   if (!email) {
     alert('Digite seu e-mail corporativo.');
     return;
   }
 
-  if (!admins.includes(email)) {
-    alert('Apenas os mais brabos podem acessar essa área.');
+  if (!/@pasqualino\.com(\.br)?$/.test(email)) {
+    alert('Use um e-mail corporativo valido.');
     return;
   }
 
-  window.location.href = 'adm.html';
+  try {
+    const response = await fetch('../api/login_admin.php', {
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: `email=${encodeURIComponent(email)}`
+    });
+
+    const data = await response.json();
+    if (!response.ok || !data.success) {
+      alert('Acesso negado: ' + (data.message || 'sem permissao'));
+      return;
+    }
+
+    window.location.href = 'adm.html';
+  } catch (err) {
+    console.error('Erro ao autenticar admin:', err);
+    alert('Erro ao autenticar admin. Tente novamente.');
+  }
 }
 </script>
 

@@ -11,15 +11,15 @@ cnp_require_admin_json();
 $id = intval($_POST['id'] ?? 0);
 if (!$id) {
     http_response_code(400);
-    echo json_encode(['success' => false, 'message' => 'ID nao informado']);
+    echo json_encode(['success' => false, 'message' => 'ID nao enviado']);
     exit;
 }
 
-$resultado = wp_trash_post($id);
+$resultado = wp_delete_post($id, true);
 
 if (!$resultado) {
     http_response_code(500);
-    echo json_encode(['success' => false, 'message' => 'Nao foi possivel ignorar a noticia']);
+    echo json_encode(['success' => false, 'message' => 'Erro ao excluir']);
     exit;
 }
 

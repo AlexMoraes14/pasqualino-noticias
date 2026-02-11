@@ -25,79 +25,109 @@ body {
   height: 88px;
   background: var(--azul);
   padding: 0 40px;
-  display: flex;
+
+  display: grid;
+  grid-template-columns: auto 1fr auto;
   align-items: center;
-  justify-content: space-between;
+
   color: #fff;
 }
 
 .logo-box {
+  background: #ffffff;
+  padding: 8px 14px;
+  border-radius: 12px;
   display: flex;
   align-items: center;
+  box-shadow: 0 4px 12px rgba(0,0,0, 0, 0.12);
 }
 
 .logo-box img {
   height: 40px;
+  display: block;
 }
 
 .admin-info {
+  text-align: center;
   font-size: 0.9rem;
   font-weight: 500;
   opacity: 0.9;
 }
 
+.topo-acoes {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
 /* =========================
    BOTÕES – BASE
 ========================= */
+/* APROVAR (ação principal) */
 .btn-principal {
   background: var(--rosa);
   color: #fff;
   border: none;
-  padding: 10px 22px;
+  padding: 10px 26px;
   border-radius: 999px;
   font-size: .85rem;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
-  transition: background .25s ease, color .25s ease, transform .15s ease;
+  transition: 
+    background .25s ease,
+    transform .15s ease,
+    box-shadow .25s ease;
 }
 
 .btn-principal:hover {
   background: var(--azul);
+  box-shadow: 0 8px 18px rgba(3, 52, 101, 0.35);
   transform: translateY(-1px);
 }
 
+/* VISUALIZAR (neutro, contorno) */
 .btn-secundario {
   background: transparent;
   border: 2px solid var(--rosa);
   color: var(--rosa);
-  padding: 9px 20px;
+  padding: 9px 22px;
   border-radius: 999px;
-  font-size: .85rem;
+  font-size: .8rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all .25s ease;
+  transition: 
+    background .25s ease,
+    color .25s ease,
+    transform .15s ease;
 }
 
 .btn-secundario:hover {
-  background: var(--azul);
-  border-color: var(--azul);
+  background: var(--rosa);
   color: #fff;
+  transform: translateY(-1px);
 }
 
+/* IGNORAR (link perigoso, discreto) */
 .btn-perigo {
-  background: none;
+  background: transparent;
   border: none;
-  color: #b91c1c;
+  color: #94a3b8;
   font-weight: 600;
-  font-size: .8rem;
+  font-size: .75rem;
   cursor: pointer;
-  white-space: nowrap;
+  padding: 0;
 }
 
 .btn-perigo:hover {
-  opacity: 0.75;
+  color: #b91c1c; /* vermelho só no hover */
+  transform: translateY(-1px);
 }
 
+@media (min-width: 480px) {
+  .acoes {
+    flex-wrap: nowrap;
+  }
+}
 /* =========================
    BOTÕES EM FUNDO AZUL
    (TOPO / BANNER)
@@ -116,34 +146,67 @@ body {
 /* =========================
    BOTÃO ATUALIZAR NOTÍCIAS
 ========================= */
-#btnAtualizar {
-  min-width: 180px;
+#btnAtualizar,
+#btnSair {
+  background: transparent;
+  color: #fff;
+  border: 2px solid #fff;
+  padding: 10px 28px;
+  border-radius: 999px;
+  font-size: .85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 
+    background .25s ease,
+    color .25s ease,
+    border-color .25s ease,
+    transform .15s ease;
 }
 
+#btnAtualizar:hover,
+#btnSair:hover {
+  background: #fff;
+  color: var(--rosa);
+  border-color: #fff;
+  transform: translateY(-1px);
+}
 /* =========================
    TABS
 ========================= */
 .tabs {
   display: flex;
-  gap: 12px;
+  gap: 14px;
   padding: 24px 32px;
 }
 
 .tab {
-  padding: 8px 20px;
+  padding: 10px 26px;
   border-radius: 999px;
-  background: #e5e7eb;
+  background: #fff;
+  border: 2px solid var(--azul);
+  color: var(--azul);
   cursor: pointer;
   font-weight: 600;
   font-size: .85rem;
-  transition: all .2s ease;
+  transition: 
+    background .25s ease,
+    color .25s ease,
+    box-shadow .25s ease,
+    transform .15s ease;
 }
 
+/* hover elegante */
+.tab:hover {
+  background: rgba(2,37,73,.05);
+  transform: translateY(-1px);
+}
+
+/* ativa */
 .tab.active {
-  background: var(--rosa);
+  background: var(--azul);
   color: #fff;
+  box-shadow: 0 8px 22px rgba(2,37,73,.25);
 }
-
 /* =========================
    CONTEÚDO
 ========================= */
@@ -170,24 +233,27 @@ body {
 
 .news-card {
   background: #fff;
-  padding: 22px 24px 20px;
+  padding: 24px 26px;
   border-radius: 18px;
-  box-shadow: 0 8px 22px rgba(0,0,0,.08);
+
+  box-shadow: 0 10px 26px rgba(0,0,0,.08);
+
   display: flex;
   flex-direction: column;
   gap: 14px;
+
   transition: transform .2s ease, box-shadow .2s ease;
 }
 
 .news-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 16px 40px rgba(0,0,0,.12);
+  transform: translateY(-3px);
+  box-shadow: 0 18px 46px rgba(0,0,0,.14);
 }
 
 .news-card h3 {
-  font-size: 0.95rem;
+  font-size: 1rem;
   font-weight: 600;
-  line-height: 1.35;
+  line-height: 1.4;
   color: var(--texto);
 }
 
@@ -196,8 +262,25 @@ body {
   color: #64748b;
 }
 
+/* CARD REMOVIDO*/
+.news-card.removendo {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity .25s ease, transform .25s ease;
+}
+
 /* CARD PENDENTE */
 .news-card.pendente {
+  border-left: 4px solid var(--rosa);
+}
+
+.news-card.pendente:hover {
+  /* mantém apenas o hover padrão (sem sombra 3D extra) */
+  transform: translateY(-3px);
+}
+
+/* CARD PUBLICADA: aplica mesma borda rosa dos pendentes */
+.news-card.publicada {
   border-left: 4px solid var(--rosa);
 }
 
@@ -207,11 +290,39 @@ body {
 .acoes {
   margin-top: auto;
   display: flex;
-  align-items: center;
-  gap: 12px;
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 8px;
 }
 
+.acoes-principais {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+}
+
+.acoes-secundarias {
+  display: flex;
+  gap: 10px;
+  font-size: .75rem;
+  margin-left: 6px;
+}
+
+/* Excluir como link de ação */
+.btn-excluir {
+  margin-top: 10px;
+  background: transparent;
+  border: none;
+  padding: 0;
+  font-size: .8rem;
+  color: #94a3b8;
+  cursor: pointer;
+  user-select: none;
+}
+
+.btn-excluir:hover {
+  color: #b91c1c;
+  text-decoration: underline;
+}
 /* =========================
    MODAL
 ========================= */
@@ -223,7 +334,7 @@ body {
   z-index: 100;
   opacity: 0;
   pointer-events: none;
-  transition: opacity .3s ease;
+  transition: opacity .12s ease;
 }
 
 .overlay.show {
@@ -236,16 +347,170 @@ body {
   inset: 8%;
   background: #fff;
   border-radius: 24px;
-  padding: 30px;
+  padding: 30px 40px;
   z-index: 200;
   opacity: 0;
-  transform: scale(.95);
+  transform: scale(.98);
   pointer-events: none;
-  transition: all .3s ease;
+  transition: opacity .12s ease, transform .12s ease;
+  display: flex;
+  max-height: 85vh;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.editor button {
+  cursor: pointer;
 }
 
 .editor.show {
   opacity: 1;
   transform: scale(1);
   pointer-events: all;
+}
+
+/* Modal de confirmação (ignorar) */
+#confirmModal {
+  inset: 50% !important;
+  transform: translate(-50%, -50%) scale(.95) !important;
+  max-width: 400px !important;
+  width: 90% !important;
+  padding: 28px 24px !important;
+  top: 50% !important;
+  left: 50% !important;
+  right: auto !important;
+  bottom: auto !important;
+}
+
+#confirmModal.show {
+  transform: translate(-50%, -50%) scale(1) !important;
+}
+
+#confirmModal h3 {
+  margin: 0 0 12px 0;
+  font-size: 1.2rem;
+  color: #333;
+}
+
+#confirmModal p {
+  margin: 0 0 24px 0;
+  font-size: 0.95rem;
+  color: #666;
+  line-height: 1.4;
+}
+
+.editor-body {
+  flex: 1;
+  overflow-y: auto;
+  margin-top: 16px;
+}
+
+.editor-header {
+  margin-bottom: 12px;
+}
+
+.btn-fechar {
+  margin-top: 32px;
+}
+
+.editor.show {
+  opacity: 1;
+  transform: scale(1);
+  pointer-events: all;
+}
+
+.modal-acoes {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.modal-acoes button {
+  min-width: 130px;
+  padding: 10px 20px;
+  border: 2px solid var(--rosa);
+  background: #fff;
+  color: var(--rosa);
+  border-radius: 20px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.modal-acoes button:hover {
+  border-color: var(--rosa);
+  background: var(--rosa);
+  color: #fff;
+}
+
+.modal-acoes .btn-perigo {
+  border-color: var(--rosa);
+  color: var(--rosa);
+  background: #fff;
+}
+
+.modal-acoes .btn-perigo:hover {
+  border-color: var(--rosa);
+  background: var(--rosa);
+  color: #fff;
+}
+
+.modal-acoes .btn-secundario {
+  border-color: var(--rosa);
+  color: var(--rosa);
+}
+
+.modal-acoes .btn-secundario:hover {
+  border-color: var(--rosa);
+  background: var(--rosa);
+  color: #fff;
+}
+
+#modalTexto {
+  margin-top: 16px;
+  line-height: 1.6;
+}
+
+#modalTexto input {
+  width: 100%;
+  margin-bottom: 16px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
+  font-size: 0.9rem;
+}
+
+.modal-label {
+  display: block;
+  font-size: .75rem;
+  font-weight: 600;
+  color: #64748b;
+  margin-bottom: 6px;
+}
+
+#editTitulo,
+#editTexto {
+  width: 100%;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-size: .9rem;
+  margin-bottom: 18px;
+}
+
+#editTexto {
+  min-height: 240px;
+  resize: vertical;
+}
+#modalTexto textarea {
+  width: 100%;
+  min-height: 260px;
+  resize: vertical;
+  padding: 14px;
+  border-radius: 12px;
+  border: 1px solid #cbd5e1;
+  font-family: inherit;
+  font-size: .9rem;
 }
