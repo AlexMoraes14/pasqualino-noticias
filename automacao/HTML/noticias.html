@@ -1,30 +1,40 @@
-<body>
-<header class="topo">
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Noticias | Pasqualino</title>
+  <link rel="stylesheet" href="../CSS/noticias.css">
+</head>
+<body>
+  <header class="topo">
+    <div class="logo-box">
+      <img src="../imagens/LOGO_OFICIAL" onerror="this.onerror=null;this.src='../imagens/logo-oficial.png';" alt="Pasqualino Contabilidade">
+    </div>
+  </header>
 
-  <div class="logo-box">
-    <img src="../imagens/logo_pasqualino.png" alt="Pasqualino Contabilidade">
-    <link rel="stylesheet" href="../CSS/noticias.css">
-  </div>
-</header>
+  <main class="conteudo">
+    <div class="titulo-area">
+      <h1>Noticias</h1>
+      <span class="data" id="data"></span>
+    </div>
 
-<main class="conteudo">
-  <div class="titulo-area">
-    <h1>Notícias do Dia</h1>
-    <span class="data" id="data"></span>
-  </div>
+    <section class="noticias-layout">
+      <div class="lista-coluna">
+        <div class="grid" id="gridNoticias"></div>
+      </div>
 
-  <div class="grid" id="gridNoticias"></div>
-</main>
+      <aside class="painel-detalhe" id="painelDetalhe">
+        <h2 id="detalheTitulo">Selecione uma noticia</h2>
+        <span class="detalhe-data" id="detalheData"></span>
+        <div class="conteudo-noticia" id="detalheTexto">
+          <p>Clique em um balao para ler a materia completa aqui.</p>
+        </div>
+        <button class="btn-fechar-detalhe" id="btnFecharDetalhe" type="button">Fechar</button>
+      </aside>
+    </section>
+  </main>
 
-<!-- OVERLAY -->
-<div class="overlay" id="overlay"></div>
-
-<!-- MODAL -->
-<div class="modal-noticia" id="modal">
-  <h2 id="modalTitulo"></h2>
-  <div class="conteudo-noticia" id="modalTexto"></div>
-</div>
-
-<script src="../JS/noticias.js"></script>
+  <script src="../JS/noticias.js"></script>
 </body>
+</html>

@@ -72,6 +72,14 @@ function publicarNoticiasWP(array $noticias): array
         ];
 
         if ($existente) {
+            // Mantem status atual para nao despublicar noticia aprovada.
+            // Excecao: se estava na lixeira (ignorada), volta para pending ao atualizar.
+            $statusAtual = get_post_status($existente->ID);
+            if ($statusAtual === 'trash') {
+                $post['post_status'] = 'pending';
+            } elseif (is_string($statusAtual) && $statusAtual !== '') {
+                $post['post_status'] = $statusAtual;
+            }
 
             $post['ID'] = $existente->ID;
             $post_id = wp_update_post($post, true);

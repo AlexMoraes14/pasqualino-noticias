@@ -79,8 +79,20 @@ document.addEventListener('DOMContentLoaded', () => {
     btn.textContent = 'Atualizando...';
 
     fetch('../api/run_pipeline.php')
-      .then(r => r.text())
+      .then(async (r) => {
+        if (!r.ok) {
+          throw new Error(`Erro HTTP: ${r.status}`);
+        }
+        const ct = r.headers.get('content-type') || '';
+        if (!ct.includes('application/json')) {
+          throw new Error('Resposta invalida do pipeline');
+        }
+        return r.json();
+      })
       .then((data) => {
+        if (!data || data.status !== 'ok') {
+          throw new Error((data && data.mensagem) || 'Falha ao executar pipeline');
+        }
         console.log('Pipeline executado:', data);
 
         // Aguarda um pouco para garantir que o banco de dados foi atualizado
@@ -91,10 +103,8 @@ document.addEventListener('DOMContentLoaded', () => {
             window.carregarPendentes();
             window.carregarPublicadas();
 
-            // Mostra feedback de sucesso
             btn.textContent = 'Atualização concluída!';
             btn.style.backgroundColor = '#10b981';
-            mostrarNotificacao('✅ Notícias atualizadas com sucesso!', 'sucesso');
 
             // Retorna ao estado normal após 3 segundos
             setTimeout(() => {

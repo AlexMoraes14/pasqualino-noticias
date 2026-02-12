@@ -39,7 +39,7 @@ body {
   border-radius: 12px;
   display: flex;
   align-items: center;
-  box-shadow: 0 4px 12px rgba(0,0,0, 0, 0.12);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
 }
 
 .logo-box img {
@@ -73,7 +73,7 @@ body {
   font-size: .85rem;
   font-weight: 700;
   cursor: pointer;
-  transition: 
+  transition:
     background .25s ease,
     transform .15s ease,
     box-shadow .25s ease;
@@ -95,7 +95,7 @@ body {
   font-size: .8rem;
   font-weight: 600;
   cursor: pointer;
-  transition: 
+  transition:
     background .25s ease,
     color .25s ease,
     transform .15s ease;
@@ -116,10 +116,12 @@ body {
   font-size: .75rem;
   cursor: pointer;
   padding: 0;
+  transition: color .2s ease, transform .12s ease, opacity .2s ease;
 }
 
 .btn-perigo:hover {
-  color: #b91c1c; /* vermelho só no hover */
+  color: #b91c1c;
+  /* vermelho só no hover */
   transform: translateY(-1px);
 }
 
@@ -128,6 +130,7 @@ body {
     flex-wrap: nowrap;
   }
 }
+
 /* =========================
    BOTÕES EM FUNDO AZUL
    (TOPO / BANNER)
@@ -156,7 +159,7 @@ body {
   font-size: .85rem;
   font-weight: 600;
   cursor: pointer;
-  transition: 
+  transition:
     background .25s ease,
     color .25s ease,
     border-color .25s ease,
@@ -170,6 +173,7 @@ body {
   border-color: #fff;
   transform: translateY(-1px);
 }
+
 /* =========================
    TABS
 ========================= */
@@ -188,7 +192,7 @@ body {
   cursor: pointer;
   font-weight: 600;
   font-size: .85rem;
-  transition: 
+  transition:
     background .25s ease,
     color .25s ease,
     box-shadow .25s ease,
@@ -197,7 +201,7 @@ body {
 
 /* hover elegante */
 .tab:hover {
-  background: rgba(2,37,73,.05);
+  background: rgba(2, 37, 73, .05);
   transform: translateY(-1px);
 }
 
@@ -205,8 +209,9 @@ body {
 .tab.active {
   background: var(--azul);
   color: #fff;
-  box-shadow: 0 8px 22px rgba(2,37,73,.25);
+  box-shadow: 0 8px 22px rgba(2, 37, 73, .25);
 }
+
 /* =========================
    CONTEÚDO
 ========================= */
@@ -236,18 +241,19 @@ body {
   padding: 24px 26px;
   border-radius: 18px;
 
-  box-shadow: 0 10px 26px rgba(0,0,0,.08);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, .08);
 
   display: flex;
   flex-direction: column;
   gap: 14px;
 
   transition: transform .2s ease, box-shadow .2s ease;
+  will-change: transform, opacity;
 }
 
 .news-card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 18px 46px rgba(0,0,0,.14);
+  box-shadow: 0 18px 46px rgba(0, 0, 0, .14);
 }
 
 .news-card h3 {
@@ -262,11 +268,19 @@ body {
   color: #64748b;
 }
 
-/* CARD REMOVIDO*/
+.news-card.aprovado {
+  box-shadow: 0 0 0 2px #16a34a inset;
+}
+/* CARD REMOVIDO */
 .news-card.removendo {
-  opacity: 0;
-  transform: translateY(10px);
-  transition: opacity .25s ease, transform .25s ease;
+  pointer-events: none;
+  transition:
+    max-height .42s cubic-bezier(.22,.61,.36,1),
+    opacity .30s ease,
+    transform .34s cubic-bezier(.22,.61,.36,1),
+    padding .34s ease,
+    margin .34s ease,
+    border-width .24s ease;
 }
 
 /* CARD PENDENTE */
@@ -279,7 +293,7 @@ body {
   transform: translateY(-3px);
 }
 
-/* CARD PUBLICADA: aplica mesma borda rosa dos pendentes */
+/* CARD PUBLICADA: borda azul alinhada ao branding */
 .news-card.publicada {
   border-left: 4px solid var(--rosa);
 }
@@ -317,19 +331,54 @@ body {
   color: #94a3b8;
   cursor: pointer;
   user-select: none;
+  transition: color .2s ease, transform .12s ease, opacity .2s ease;
 }
 
 .btn-excluir:hover {
   color: #b91c1c;
   text-decoration: underline;
 }
+
+.btn-principal.is-loading,
+.btn-perigo.is-loading,
+.btn-excluir.is-loading {
+  opacity: .75;
+  pointer-events: none;
+}
+
+.btn-principal.is-success {
+  background: #16a34a;
+  color: #fff;
+}
+
+.btn-principal.is-error {
+  background: #b91c1c;
+  color: #fff;
+}
+
+.btn-perigo.is-success,
+.btn-excluir.is-success {
+  color: #15803d;
+}
+
+.btn-perigo.is-error,
+.btn-excluir.is-error {
+  color: #b91c1c;
+}
+
+.btn-principal.is-pressed,
+.btn-perigo.is-pressed,
+.btn-excluir.is-pressed {
+  transform: translateY(1px) scale(.98);
+}
+
 /* =========================
    MODAL
 ========================= */
 .overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,.55);
+  background: rgba(0, 0, 0, .55);
   backdrop-filter: blur(4px);
   z-index: 100;
   opacity: 0;
@@ -397,6 +446,32 @@ body {
   font-size: 0.95rem;
   color: #666;
   line-height: 1.4;
+}
+
+#confirmModal .modal-acoes button {
+  border-color: var(--rosa);
+  background: #fff;
+  color: var(--rosa);
+}
+
+#confirmModal .modal-acoes button:hover {
+  border-color: var(--azul);
+  background: var(--azul);
+  color: #fff;
+}
+
+#confirmModal #confirmarIgnorar.is-success,
+#confirmModal #confirmarIgnorar.is-error {
+  border-color: var(--rosa);
+  background: #fff;
+  color: var(--rosa);
+}
+
+#confirmModal #confirmarIgnorar.is-loading {
+  border-color: var(--rosa);
+  background: #fff;
+  color: var(--rosa);
+  opacity: .8;
 }
 
 .editor-body {
@@ -504,6 +579,7 @@ body {
   min-height: 240px;
   resize: vertical;
 }
+
 #modalTexto textarea {
   width: 100%;
   min-height: 260px;
