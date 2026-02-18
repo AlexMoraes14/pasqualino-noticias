@@ -1,1 +1,22 @@
+Sistema de automação editorial desenvolvido para a Pasqualino Contabilidade, responsável por coletar, reformular e organizar notícias automaticamente, com fluxo completo de revisão e publicação.
+
+Stack:
+-PHP • JavaScript • HTML • CSS • Integração com WordPress • Pipeline automatizado • IA para reformulação de conteúdo
+----==----
+Principais Entregas:
+-Pipeline automatizado de coleta de notícias (janela de 7 dias)
+
+Reformulação de conteúdo com IA
+
+Painel administrativo com revisão, edição e aprovação
+
+Publicação automatizada no WordPress
+
+Front responsivo alinhado ao branding institucional
+
+Controle de acesso para área administrativa
+----==----
+Resultado:
+-Redução do tempo de curadoria manual e padronização da linguagem institucional, com fluxo editorial estruturado e integração completa entre backend, painel admin e front público.
+
 apó baixar os arquivos, renomeie a "pasqualino-noticias" apenas para "noticias" se estiver no repositório C: os caminhos já estarão ok.
