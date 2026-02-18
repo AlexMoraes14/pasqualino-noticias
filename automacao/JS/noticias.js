@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
   const grid = document.getElementById('gridNoticias');
   const layout = document.querySelector('.noticias-layout');
+  const bodyEl = document.body;
   const detalheTitulo = document.getElementById('detalheTitulo');
   const detalheData = document.getElementById('detalheData');
   const detalheTexto = document.getElementById('detalheTexto');
@@ -22,6 +23,14 @@ document.addEventListener('DOMContentLoaded', () => {
       year: 'numeric'
     });
   }
+
+  function atualizarEstadoTopo() {
+    if (!bodyEl) return;
+    bodyEl.classList.toggle('topo-reduzido', window.scrollY > 12);
+  }
+
+  atualizarEstadoTopo();
+  window.addEventListener('scroll', atualizarEstadoTopo, { passive: true });
 
   function limparHtml(texto) {
     const temp = document.createElement('div');
@@ -133,7 +142,7 @@ document.addEventListener('DOMContentLoaded', () => {
     fecharPainel({ limparTexto: true });
   }
 
-  fetch('/noticias/automacao/api/listar_publicadas.php')
+  fetch('../api/listar_publicadas.php')
     .then((r) => {
       if (!r.ok) throw new Error(`Erro HTTP: ${r.status}`);
       return r.json();

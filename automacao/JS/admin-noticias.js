@@ -106,12 +106,12 @@ document.addEventListener('DOMContentLoaded', () => {
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
     })
       .then(() => {
-        window.location.href = 'index.html';
+        window.location.href = 'noticias.html';
         return true;
       })
       .catch((err) => {
         console.error('Erro ao encerrar sessao:', err);
-        window.location.href = 'index.html';
+        window.location.href = 'noticias.html';
         return false;
       });
   }
@@ -517,7 +517,7 @@ document.addEventListener('DOMContentLoaded', () => {
       })
       .then(({ ok, dataResp }) => {
         if (!ok || !dataResp.success) {
-          window.location.href = 'index.html';
+          window.location.href = 'noticias.html';
           return;
         }
         adminAutenticado = true;
@@ -526,7 +526,7 @@ document.addEventListener('DOMContentLoaded', () => {
       })
       .catch((err) => {
         console.error('Erro ao validar sessao admin:', err);
-        window.location.href = 'index.html';
+        window.location.href = 'noticias.html';
       });
   }
 

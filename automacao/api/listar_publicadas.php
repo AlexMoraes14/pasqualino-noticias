@@ -5,7 +5,6 @@ require_once __DIR__ . '/_auth.php';
 require_once __DIR__ . '/../../wordpress/wp-load.php';
 
 header('Content-Type: application/json; charset=utf-8');
-cnp_require_admin_json();
 
 $args = [
     'post_type' => 'post',

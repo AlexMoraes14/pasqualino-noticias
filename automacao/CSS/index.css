@@ -112,6 +112,32 @@ input:focus, select:focus {
   opacity: 1;
 }
 
+.btn-outline {
+  width: 100%;
+  padding: 12px;
+  border-radius: 14px;
+  border: 2px solid var(--azul);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--azul);
+  text-decoration: none;
+  cursor: pointer;
+  background: #fff;
+  transition: transform .25s ease, background .25s ease, color .25s ease, border-color .25s ease;
+}
+
+.btn-outline:hover {
+  transform: translateY(-1px);
+  background: var(--azul);
+  color: #fff;
+  border-color: var(--azul);
+}
+
 /* CONTATO */
 .contato {
   position: fixed;

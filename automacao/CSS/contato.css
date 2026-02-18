@@ -1,22 +1,205 @@
+:root {
+  --azul-fundo: #0a1f45;
+  --azul: #022549;
+  --azul-card: #12335b;
+  --rosa: #e00286;
+  --texto: #1a365f;
+  --texto-suave: #6d7f9b;
+}
+
+* {
+  box-sizing: border-box;
+}
+
 body {
-  background: linear-gradient(135deg, #112a4f, #D31882);
-  font-family: Arial;
-  height: 100vh;
+  margin: 0;
+  min-height: 100vh;
+  padding: 86px 20px 24px;
+  background:
+    radial-gradient(circle at 50% 72%, rgba(0, 0, 0, 0.2), transparent 52%),
+    linear-gradient(145deg, var(--azul), var(--rosa));
+  font-family: "Segoe UI", Arial, sans-serif;
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+  color: var(--texto);
+}
+
+.pagina-contato {
+  width: min(680px, 100%);
 }
 
 .box {
-  background: white;
-  padding: 40px;
-  border-radius: 20px;
+  width: 100%;
+  background: rgba(249, 250, 254, 0.97);
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  border-radius: 24px;
+  padding: 34px 38px 30px;
+  box-shadow: 0 22px 48px rgba(7, 21, 47, 0.3);
+}
+
+.topo-contato {
+  display: flex;
+  justify-content: center;
+  padding-bottom: 16px;
+  margin-bottom: 22px;
+  border-bottom: 1px solid rgba(18, 51, 91, 0.18);
+}
+
+.logo-contato {
+  width: min(292px, 68vw);
+  max-width: 100%;
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 6px 12px rgba(6, 21, 49, 0.2));
+}
+
+.box h1 {
+  margin: 0;
+  text-align: left;
+  color: var(--azul-card);
+  font-size: clamp(2rem, 3.1vw, 2.3rem);
+  line-height: 1.12;
+  letter-spacing: 0.01em;
+}
+
+.subtitulo {
+  margin: 10px 0 22px;
+  text-align: left;
+  color: var(--texto-suave);
+  font-size: 1rem;
+}
+
+.contatos {
+  display: grid;
+  gap: 14px;
+}
+
+.contato-linha {
+  display: grid;
+  grid-template-columns: 36px minmax(0, 1fr);
+  gap: 12px;
+  align-items: start;
+  text-decoration: none;
+  color: inherit;
+  padding: 8px 2px;
+}
+
+.contato-linha + .contato-linha {
+  border-top: 1px solid #dde4f0;
+  padding-top: 16px;
+  margin-top: 2px;
+}
+
+.contato-icone {
+  width: 30px;
+  height: 30px;
+  margin-top: 1px;
+  border-radius: 50%;
+  background: linear-gradient(145deg, rgba(224, 2, 134, 0.18), rgba(224, 2, 134, 0.05));
+  color: var(--rosa);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+}
+
+.contato-meta {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.contato-label {
+  color: var(--texto-suave);
+  font-size: 0.74rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.contato-valor {
+  color: var(--azul-card);
+  font-size: 1.34rem;
+  line-height: 1.25;
+  font-weight: 600;
+  word-break: break-word;
+}
+
+.contato-email:hover .contato-valor {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+
+.contato-email:focus-visible {
+  outline: 2px solid var(--rosa);
+  outline-offset: 3px;
+  border-radius: 8px;
 }
 
 .voltar {
   position: fixed;
-  top: 20px;
-  left: 20px;
-  color: white;
+  top: 16px;
+  left: 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 2px solid #fff;
+  background: var(--azul);
+  color: #fff;
   text-decoration: none;
+  font-size: 0.88rem;
+  font-weight: 600;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+.voltar:hover {
+  background: #fff;
+  border-color: #fff;
+  color: var(--rosa);
+  transform: translateY(-1px);
+}
+
+@media (max-width: 760px) {
+  body {
+    padding: 70px 14px 18px;
+  }
+
+  .pagina-contato {
+    width: min(560px, 100%);
+  }
+
+  .box {
+    border-radius: 20px;
+    padding: 24px 20px 22px;
+  }
+
+  .logo-contato {
+    width: min(226px, 70vw);
+  }
+
+  .box h1 {
+    font-size: 1.82rem;
+    line-height: 1.14;
+  }
+
+  .subtitulo {
+    margin-bottom: 18px;
+    font-size: 0.96rem;
+  }
+
+  .contato-valor {
+    font-size: 1.04rem;
+  }
+
+  .voltar {
+    top: 12px;
+    left: 12px;
+    padding: 7px 12px;
+    font-size: 0.82rem;
+  }
 }

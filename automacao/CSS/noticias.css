@@ -4,6 +4,8 @@
   --cinza: #f2f2f2;
   --branco: #ffffff;
   --texto: #1d3557;
+  --topo-fixo-altura: 110px;
+  --topo-fixo-altura-scroll: 84px;
 }
 
 * {
@@ -12,14 +14,25 @@
   box-sizing: border-box;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
+  --topo-fixo-atual: var(--topo-fixo-altura);
   font-family: "Segoe UI", sans-serif;
   background: var(--azul);
   color: var(--texto);
+  padding-top: var(--topo-fixo-atual);
+  transition: padding-top .22s ease;
+}
+
+body.topo-reduzido {
+  --topo-fixo-atual: var(--topo-fixo-altura-scroll);
 }
 
 .topo {
-  min-height: 110px;
+  min-height: var(--topo-fixo-atual);
   background: var(--cinza);
   border-bottom-left-radius: 60px;
   border-bottom-right-radius: 60px;
@@ -28,13 +41,117 @@ body {
   padding: 22px 36px;
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 30;
+  transition: min-height .22s ease, padding .22s ease, border-radius .22s ease, box-shadow .22s ease;
 }
 
 
 
+.logo-link {
+  display: inline-flex;
+  line-height: 0;
+  text-decoration: none;
+  cursor: pointer;
+}
+
 .logo-box img {
   height: 56px;
   display: block;
+  transition: height .22s ease;
+}
+
+.topo-acoes {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-left: auto;
+}
+
+.topo-sociais-wrap {
+  position: relative;
+  width: 165px;
+  display: block;
+  line-height: 0;
+  transition: width .22s ease;
+}
+
+.topo-sociais {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.social-hit {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  border-radius: 999px;
+  z-index: 2;
+  cursor: pointer;
+}
+
+.social-facebook {
+  left: 0;
+  width: 31%;
+}
+
+.social-instagram {
+  left: 34.5%;
+  width: 31%;
+}
+
+.social-whatsapp {
+  right: 0;
+  width: 31%;
+}
+
+.btn-login {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 92px;
+  padding: 10px 16px;
+  border-radius: 999px;
+  border: 2px solid var(--azul);
+  color: var(--azul);
+  background: #fff;
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: background .2s ease, color .2s ease, transform .2s ease, padding .22s ease, min-width .22s ease;
+  margin-top: 2px;
+}
+
+.btn-login:hover {
+  background: var(--azul);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+body.topo-reduzido .topo {
+  padding: 12px 28px;
+  border-bottom-left-radius: 30px;
+  border-bottom-right-radius: 30px;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.14);
+}
+
+body.topo-reduzido .logo-box img {
+  height: 44px;
+}
+
+body.topo-reduzido .topo-sociais-wrap {
+  width: 150px;
+}
+
+body.topo-reduzido .btn-login {
+  min-width: 84px;
+  padding: 8px 14px;
 }
 
 .conteudo {
@@ -137,7 +254,7 @@ body {
   padding: 22px 0;
   max-height: calc(100vh - 210px);
   position: sticky;
-  top: 20px;
+  top: calc(var(--topo-fixo-atual) + 20px);
   display: flex;
   flex-direction: column;
   will-change: opacity, transform;
@@ -249,6 +366,20 @@ body {
 }
 
 @media (max-width: 1080px) {
+  .topo {
+    padding: 18px 20px;
+    border-bottom-left-radius: 32px;
+    border-bottom-right-radius: 32px;
+  }
+
+  .topo-acoes {
+    gap: 12px;
+  }
+
+  .topo-sociais-wrap {
+    width: 150px;
+  }
+
   .noticias-layout {
     flex-direction: column;
     gap: 16px;
@@ -297,5 +428,46 @@ body {
 
   .conteudo-noticia {
     max-height: 380px;
+  }
+}
+
+@media (max-width: 720px) {
+  :root {
+    --topo-fixo-altura: 168px;
+    --topo-fixo-altura-scroll: 150px;
+  }
+
+  .topo {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .topo-acoes {
+    width: 100%;
+    justify-content: space-between;
+    margin-left: 0;
+  }
+
+  .topo-sociais {
+    width: 100%;
+  }
+
+  .topo-sociais-wrap {
+    width: 134px;
+  }
+
+  .btn-login {
+    min-width: 80px;
+    padding: 8px 14px;
+  }
+
+  body.topo-reduzido .topo {
+    padding: 14px 18px;
+    border-bottom-left-radius: 24px;
+    border-bottom-right-radius: 24px;
+  }
+
+  body.topo-reduzido .topo-sociais-wrap {
+    width: 126px;
   }
 }

@@ -16,33 +16,17 @@
     <input
       id="email"
       type="email"
-      placeholder="Digite seu e-mail (@pasqualino.com.br)"
-      pattern=".+@pasqualino\.com(\.br)?"
+      placeholder="Digite seu e-mail"
       required
     >
-
-    <select required>
-      <option value="">Selecione seu departamento</option>
-      <option>Auxiliar Administrativo</option>
-      <option>CMR</option>
-      <option>Contabil</option>
-      <option>CS</option>
-      <option>Departamento Pessoal</option>
-      <option>Financeiro</option>
-      <option>Fiscal</option>
-      <option>Legalizacao</option>
-      <option>Marketing</option>
-      <option>RH</option>
-      <option>T.I</option>
-    </select>
-
-    <a href="noticias.html" class="btn-primary">
-      Entrar
-    </a>
 
     <button class="btn-primary btn-admin" onclick="entrarAdmin()">
       Entrar como admin
     </button>
+
+    <a href="noticias.html" class="btn-outline">
+      Ir para noticias
+    </a>
   </div>
 </div>
 
@@ -51,6 +35,10 @@
 </a>
 
 <script>
+function emailValidoGeral(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
 async function entrarAdmin() {
   const email = document.getElementById('email').value.trim().toLowerCase();
 
@@ -59,7 +47,12 @@ async function entrarAdmin() {
     return;
   }
 
-  if (!/@pasqualino\.com(\.br)?$/.test(email)) {
+  if (!emailValidoGeral(email)) {
+    alert('Digite um e-mail valido.');
+    return;
+  }
+
+  if (!/@pasqualino\.com\.br$/.test(email)) {
     alert('Use um e-mail corporativo valido.');
     return;
   }

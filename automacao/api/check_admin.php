@@ -13,5 +13,6 @@ if (!cnp_is_admin_authenticated()) {
 
 echo json_encode([
     'success' => true,
-    'email' => $_SESSION[CNP_ADMIN_SESSION_KEY] ?? null,
+    'email' => cnp_current_authenticated_email(),
+    'role' => cnp_current_authenticated_role(),
 ]);

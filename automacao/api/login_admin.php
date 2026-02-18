@@ -14,10 +14,20 @@ if ($email === '') {
     exit;
 }
 
+if (!filter_var($email, FILTER_VALIDATE_EMAIL) || !preg_match('/@pasqualino\.com\.br$/', $email)) {
+    http_response_code(400);
+    echo json_encode(['success' => false, 'message' => 'Email corporativo invalido']);
+    exit;
+}
+
 if (!cnp_admin_login($email)) {
     http_response_code(403);
     echo json_encode(['success' => false, 'message' => 'Usuario sem permissao de admin']);
     exit;
 }
 
-echo json_encode(['success' => true]);
+echo json_encode([
+    'success' => true,
+    'email' => cnp_current_authenticated_email(),
+    'role' => cnp_current_authenticated_role(),
+]);
