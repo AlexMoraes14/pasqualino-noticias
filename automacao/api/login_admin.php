@@ -7,10 +7,17 @@ header('Content-Type: application/json; charset=utf-8');
 cnp_require_post_json();
 
 $email = cnp_normalize_email($_POST['email'] ?? '');
+$password = (string) ($_POST['password'] ?? '');
 
 if ($email === '') {
     http_response_code(400);
     echo json_encode(['success' => false, 'message' => 'Email obrigatorio']);
+    exit;
+}
+
+if ($password === '') {
+    http_response_code(400);
+    echo json_encode(['success' => false, 'message' => 'Senha obrigatoria']);
     exit;
 }
 
@@ -20,9 +27,27 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL) || !preg_match('/@pasqualino\.com
     exit;
 }
 
-if (!cnp_admin_login($email)) {
+if (!cnp_is_panel_password_configured()) {
+    http_response_code(500);
+    echo json_encode(['success' => false, 'message' => 'Senha admin nao configurada']);
+    exit;
+}
+
+if (!cnp_has_panel_access_role(cnp_role_for_email($email))) {
     http_response_code(403);
-    echo json_encode(['success' => false, 'message' => 'Usuario sem permissao de admin']);
+    echo json_encode(['success' => false, 'message' => 'Email sem permissao']);
+    exit;
+}
+
+if (!cnp_verify_panel_password($password)) {
+    http_response_code(403);
+    echo json_encode(['success' => false, 'message' => 'Senha incorreta']);
+    exit;
+}
+
+if (!cnp_admin_login($email, $password)) {
+    http_response_code(403);
+    echo json_encode(['success' => false, 'message' => 'Credenciais invalidas']);
     exit;
 }
 

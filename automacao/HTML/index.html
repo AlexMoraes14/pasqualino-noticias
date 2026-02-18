@@ -12,21 +12,35 @@
     <div class="logo-container">
       <img src="../imagens/logo-oficial.png" alt="Logo Pasqualino">
     </div>
+    <form class="admin-form" method="post" action="../api/login_admin_form.php" autocomplete="on">
+      <input
+        id="email"
+        name="email"
+        type="email"
+        placeholder="Digite seu e-mail"
+        autocomplete="username"
+        required
+      >
 
-    <input
-      id="email"
-      type="email"
-      placeholder="Digite seu e-mail"
-      required
-    >
+      <input
+        id="password"
+        name="password"
+        type="password"
+        placeholder="Digite sua senha"
+        autocomplete="current-password"
+        required
+      >
 
-    <button class="btn-primary btn-admin" onclick="entrarAdmin()">
-      Entrar como admin
-    </button>
+      <button class="btn-primary btn-admin" type="submit">
+        Entrar como admin
+      </button>
 
-    <a href="noticias.html" class="btn-outline">
-      Ir para noticias
-    </a>
+      <a href="noticias.html" class="btn-outline">
+        Ir para noticias
+      </a>
+    </form>
+
+    <p class="login-erro" id="loginErro" aria-live="polite"></p>
   </div>
 </div>
 
@@ -35,47 +49,21 @@
 </a>
 
 <script>
-function emailValidoGeral(email) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-}
+const params = new URLSearchParams(window.location.search);
+const erro = params.get('erro');
+const erroEl = document.getElementById('loginErro');
 
-async function entrarAdmin() {
-  const email = document.getElementById('email').value.trim().toLowerCase();
+const mensagens = {
+  missing: 'Preencha e-mail e senha.',
+  email: 'Use um e-mail corporativo valido (@pasqualino.com.br).',
+  email_auth: 'Este e-mail nao tem permissao para entrar como admin.',
+  senha: 'Senha incorreta.',
+  config: 'A senha do painel nao foi configurada.',
+  cred: 'Credenciais invalidas.'
+};
 
-  if (!email) {
-    alert('Digite seu e-mail corporativo.');
-    return;
-  }
-
-  if (!emailValidoGeral(email)) {
-    alert('Digite um e-mail valido.');
-    return;
-  }
-
-  if (!/@pasqualino\.com\.br$/.test(email)) {
-    alert('Use um e-mail corporativo valido.');
-    return;
-  }
-
-  try {
-    const response = await fetch('../api/login_admin.php', {
-      method: 'POST',
-      credentials: 'same-origin',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: `email=${encodeURIComponent(email)}`
-    });
-
-    const data = await response.json();
-    if (!response.ok || !data.success) {
-      alert('Acesso negado: ' + (data.message || 'sem permissao'));
-      return;
-    }
-
-    window.location.href = 'adm.html';
-  } catch (err) {
-    console.error('Erro ao autenticar admin:', err);
-    alert('Erro ao autenticar admin. Tente novamente.');
-  }
+if (erro && erroEl) {
+  erroEl.textContent = mensagens[erro] || 'Nao foi possivel entrar.';
 }
 </script>
 
