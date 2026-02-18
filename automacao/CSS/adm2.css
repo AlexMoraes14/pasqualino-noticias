@@ -515,20 +515,20 @@ body {
 }
 
 .modal-acoes button:hover {
-  border-color: var(--rosa);
-  background: var(--rosa);
+  border-color: var(--azul);
+  background: var(--azul);
   color: #fff;
 }
 
 .modal-acoes .btn-perigo {
-  border-color: var(--rosa);
-  color: var(--rosa);
+  border-color: var(--azul);
+  color: var(--azul);
   background: #fff;
 }
 
 .modal-acoes .btn-perigo:hover {
-  border-color: var(--rosa);
-  background: var(--rosa);
+  border-color: var(--azul);
+  background: var(--azul);
   color: #fff;
 }
 
@@ -538,8 +538,8 @@ body {
 }
 
 .modal-acoes .btn-secundario:hover {
-  border-color: var(--rosa);
-  background: var(--rosa);
+  border-color: var(--azul);
+  background: var(--azul);
   color: #fff;
 }
 
