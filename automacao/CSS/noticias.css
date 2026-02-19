@@ -318,6 +318,34 @@ body.topo-reduzido .btn-login {
   margin-bottom: 1em;
 }
 
+.conteudo-noticia .tabela-scroll {
+  width: 100%;
+  overflow-x: auto;
+  margin: 16px 0 20px;
+}
+
+.conteudo-noticia table {
+  width: 100%;
+  min-width: 420px;
+  border-collapse: collapse;
+  background: #fff;
+}
+
+.conteudo-noticia th,
+.conteudo-noticia td {
+  border: 1px solid #c8d1df;
+  padding: 9px 10px;
+  color: #18345f;
+  font-size: 0.93rem;
+  line-height: 1.35;
+}
+
+.conteudo-noticia th {
+  background: #e7f0ff;
+  color: #123562;
+  font-weight: 700;
+}
+
 .conteudo-noticia em {
   display: block;
   margin-top: 18px;

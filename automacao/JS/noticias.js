@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function limparHtml(texto) {
     const temp = document.createElement('div');
-    temp.innerHTML = texto || '';
+    temp.innerHTML = normalizarMarcacaoMarkdown(texto || '');
     return (temp.textContent || temp.innerText || '').replace(/\s+/g, ' ').trim();
   }
 
@@ -53,11 +53,41 @@ document.addEventListener('DOMContentLoaded', () => {
       .replace(/'/g, '&#39;');
   }
 
-  function textoParaHtml(texto) {
-    return escapeHtml(texto).replace(/\n{2,}/g, '</p><p>').replace(/\n/g, '<br>');
+  function normalizarMarcacaoMarkdown(texto) {
+    return (texto || '')
+      .replace(/(^|[\r\n>])\s{0,3}#{1,6}\s+/g, '$1')
+      .replace(/\*\*([^*]+?)\*\*/g, '$1')
+      .replace(/\*\*/g, '');
   }
 
-  function montarDetalheHtml(textoBruto) {
+  function textoParaHtml(texto) {
+    return escapeHtml(normalizarMarcacaoMarkdown(texto))
+      .replace(/\n{2,}/g, '</p><p>')
+      .replace(/\n/g, '<br>');
+  }
+
+  function prepararConteudoHtml(conteudoHtml) {
+    const html = normalizarMarcacaoMarkdown((conteudoHtml || '').trim());
+    if (!html) return '';
+
+    const temp = document.createElement('div');
+    temp.innerHTML = html;
+
+    temp.querySelectorAll('table').forEach((table) => {
+      if (table.closest('.tabela-scroll')) return;
+      const wrapper = document.createElement('div');
+      wrapper.className = 'tabela-scroll';
+      table.parentNode.insertBefore(wrapper, table);
+      wrapper.appendChild(table);
+    });
+
+    return temp.innerHTML.trim();
+  }
+
+  function montarDetalheHtml(conteudoHtml, textoBruto) {
+    const htmlTratado = prepararConteudoHtml(conteudoHtml);
+    if (htmlTratado) return htmlTratado;
+
     const texto = (textoBruto || '').trim();
     if (!texto) return '<p>Conteudo indisponivel.</p>';
 
@@ -80,7 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const aplicarConteudo = () => {
       detalheTitulo.textContent = item.titulo || 'Sem titulo';
       detalheData.textContent = item.data || '';
-      detalheTexto.innerHTML = montarDetalheHtml(item.texto);
+      detalheTexto.innerHTML = montarDetalheHtml(item.conteudo_html, item.texto);
       detalheTexto.scrollTop = 0;
     };
 

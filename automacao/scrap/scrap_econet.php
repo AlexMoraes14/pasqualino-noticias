@@ -30,15 +30,31 @@ function cnp_scrap_econet_noticias(int $dias = 7): array
     libxml_use_internal_errors($previousErrors);
 
     $xpath = new DOMXPath($dom);
-    $anchors = $xpath->query("//a[starts-with(@name,'fed')]");
+    $anchors = $xpath->query("//a[@name]");
     if (!$anchors) {
         return [];
     }
+
+    $categoriaPorPrefixo = [
+        'fed' => 'federal',
+        'com' => 'comex',
+        'icm' => 'federal',
+    ];
 
     $noticias = [];
     $limite = new DateTime('-' . max(1, $dias) . ' days');
 
     foreach ($anchors as $a) {
+        $anchorName = strtolower(trim((string) $a->getAttribute('name')));
+        if (!preg_match('/^([a-z]+)\d+$/', $anchorName, $matches)) {
+            continue;
+        }
+
+        $prefixo = $matches[1];
+        if (!isset($categoriaPorPrefixo[$prefixo])) {
+            continue;
+        }
+
         $node = $a->nextSibling;
         while ($node && $node->nodeType !== XML_ELEMENT_NODE) {
             $node = $node->nextSibling;
@@ -50,7 +66,7 @@ function cnp_scrap_econet_noticias(int $dias = 7): array
 
         $texto = trim((string) preg_replace('/\s+/', ' ', $node->textContent));
 
-        if (!preg_match('/^(\d{2}\/\d{2}\/\d{4})\s*(.+)$/', $texto, $m)) {
+        if (!preg_match('/^(\d{2}\/\d{2}\/\d{4})\s*(.+)$/u', $texto, $m)) {
             continue;
         }
 
@@ -81,7 +97,7 @@ function cnp_scrap_econet_noticias(int $dias = 7): array
             'data' => $dataStr,
             'titulo' => $titulo,
             'conteudo' => trim($conteudoHtml),
-            'categoria' => 'federal',
+            'categoria' => $categoriaPorPrefixo[$prefixo],
         ];
     }
 

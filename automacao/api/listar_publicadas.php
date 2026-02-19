@@ -5,7 +5,6 @@ require_once __DIR__ . '/_auth.php';
 require_once __DIR__ . '/../../wordpress/wp-load.php';
 
 header('Content-Type: application/json; charset=utf-8');
-cnp_require_admin_json();
 
 $args = [
     'post_type' => 'post',
@@ -24,11 +23,13 @@ $saida = [];
 
 foreach ($query->posts as $post) {
     $textoLimpo = wp_strip_all_tags($post->post_content, true);
+    $conteudoHtml = wp_kses_post((string) $post->post_content);
 
     $saida[] = [
         'id' => $post->ID,
         'titulo' => $post->post_title,
         'texto' => trim($textoLimpo),
+        'conteudo_html' => $conteudoHtml,
         'data' => get_the_date('d/m/Y', $post->ID),
     ];
 }
