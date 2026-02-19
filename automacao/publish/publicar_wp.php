@@ -23,8 +23,11 @@ function publicarNoticiasWP(array $noticias): array
         'ignorados'   => 0,
     ];
 
+    $autorPadrao = defined('WP_AUTHOR_ID') ? max(1, (int) WP_AUTHOR_ID) : 1;
+    $categoriaPadrao = defined('WP_DEFAULT_CATEGORY') ? max(1, (int) WP_DEFAULT_CATEGORY) : 3;
+
     $mapaCategorias = [
-        'federal'     => 3,
+        'federal'     => $categoriaPadrao,
         'trabalhista' => 4,
         'comex'       => 5,
     ];
@@ -66,7 +69,7 @@ function publicarNoticiasWP(array $noticias): array
             'post_title'    => $titulo,
             'post_content'  => $conteudoFinal,
             'post_status'   => 'pending',
-            'post_author'   => 1,
+            'post_author'   => $autorPadrao,
             'post_category' => [$categoriaId],
             'post_date'     => $dataObj->format('Y-m-d H:i:s'),
         ];

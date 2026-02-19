@@ -3,7 +3,10 @@ declare(strict_types=1);
 
 const CNP_ADMIN_SESSION_KEY = 'cnp_admin_email';
 const CNP_AUTH_ROLE_SESSION_KEY = 'cnp_auth_role';
+const CNP_LAST_ACTIVITY_SESSION_KEY = 'cnp_last_activity';
 const CNP_AUTH_ENV_PATH = __DIR__ . '/../.env';
+const CNP_DEFAULT_SESSION_TTL = 7200;
+const CNP_MIN_SESSION_TTL = 300;
 
 function cnp_env_values(): array
 {
@@ -139,15 +142,81 @@ function cnp_verify_panel_password(string $password): bool
     return false;
 }
 
+function cnp_is_https_request(): bool
+{
+    $https = strtolower((string) ($_SERVER['HTTPS'] ?? ''));
+    if ($https !== '' && $https !== 'off') {
+        return true;
+    }
+
+    if ((string) ($_SERVER['SERVER_PORT'] ?? '') === '443') {
+        return true;
+    }
+
+    $forwardedProto = strtolower((string) ($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? ''));
+    return str_contains($forwardedProto, 'https');
+}
+
+function cnp_session_timeout_seconds(): int
+{
+    $rawTtl = (int) cnp_env('CNP_SESSION_TTL', (string) CNP_DEFAULT_SESSION_TTL);
+    if ($rawTtl < CNP_MIN_SESSION_TTL) {
+        return CNP_MIN_SESSION_TTL;
+    }
+
+    return $rawTtl;
+}
+
+function cnp_clear_auth_session(): void
+{
+    unset(
+        $_SESSION[CNP_ADMIN_SESSION_KEY],
+        $_SESSION[CNP_AUTH_ROLE_SESSION_KEY],
+        $_SESSION[CNP_LAST_ACTIVITY_SESSION_KEY]
+    );
+
+    if (session_status() === PHP_SESSION_ACTIVE) {
+        session_regenerate_id(true);
+    }
+}
+
+function cnp_enforce_session_timeout(): void
+{
+    if (session_status() !== PHP_SESSION_ACTIVE) {
+        return;
+    }
+
+    $now = time();
+    $lastActivity = (int) ($_SESSION[CNP_LAST_ACTIVITY_SESSION_KEY] ?? 0);
+
+    if ($lastActivity > 0 && ($now - $lastActivity) > cnp_session_timeout_seconds()) {
+        cnp_clear_auth_session();
+    }
+
+    $_SESSION[CNP_LAST_ACTIVITY_SESSION_KEY] = $now;
+}
+
 function cnp_admin_start_session(): void
 {
-    if (session_status() === PHP_SESSION_NONE) {
-        session_set_cookie_params([
-            'httponly' => true,
-            'samesite' => 'Lax',
-        ]);
-        session_start();
+    if (session_status() === PHP_SESSION_ACTIVE) {
+        cnp_enforce_session_timeout();
+        return;
     }
+
+    ini_set('session.use_only_cookies', '1');
+    ini_set('session.use_strict_mode', '1');
+
+    session_name('CNPSESSID');
+    session_set_cookie_params([
+        'lifetime' => 0,
+        'path' => '/',
+        'secure' => cnp_is_https_request(),
+        'httponly' => true,
+        'samesite' => 'Lax',
+    ]);
+
+    session_start();
+    cnp_enforce_session_timeout();
 }
 
 function cnp_normalize_email(?string $email): string
@@ -244,4 +313,3 @@ function cnp_require_admin_json(): void
         exit;
     }
 }
-

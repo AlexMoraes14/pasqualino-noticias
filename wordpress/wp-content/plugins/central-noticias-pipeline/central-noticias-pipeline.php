@@ -1,22 +1,105 @@
 <?php
 /**
- * Plugin Name: Central de Notícias – Atualização Automática
- * Description: Executa o pipeline de notícias Econet com 1 clique no painel.
- * Version: 1.0
+ * Plugin Name: Central de Noticias - Atualizacao Automatica
+ * Description: Executa o pipeline de noticias Econet com 1 clique no painel.
+ * Version: 1.1
  */
 
-if (!defined('ABSPATH')) exit;
+if (!defined('ABSPATH')) {
+    exit;
+}
 
-// ================== PERMISSÃO ==================
-function cnp_user_can_run(): bool {
+function cnp_user_can_run(): bool
+{
     return current_user_can('edit_others_posts');
 }
 
-// ================== MENU ADMIN =================
-add_action('admin_menu', function () {
+function cnp_logs_table_name(): string
+{
+    global $wpdb;
+    return $wpdb->prefix . 'pipeline_logs';
+}
+
+function cnp_pipeline_file_path(): string
+{
+    return dirname(ABSPATH) . '/automacao/pipeline.php';
+}
+
+function cnp_install_logs_table(): void
+{
+    global $wpdb;
+
+    $table = cnp_logs_table_name();
+    $charset = $wpdb->get_charset_collate();
+
+    require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+
+    dbDelta("
+        CREATE TABLE {$table} (
+            id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+            executed_at datetime NOT NULL,
+            status varchar(20) NOT NULL DEFAULT '',
+            coletadas int(11) NOT NULL DEFAULT 0,
+            criadas int(11) NOT NULL DEFAULT 0,
+            atualizados int(11) NOT NULL DEFAULT 0,
+            ignorados int(11) NOT NULL DEFAULT 0,
+            mensagem text NULL,
+            PRIMARY KEY  (id),
+            KEY executed_at (executed_at)
+        ) {$charset};
+    ");
+}
+
+function cnp_maybe_upgrade_logs_table(): void
+{
+    $currentVersion = get_option('cnp_pipeline_db_version', '');
+    $targetVersion = '1.1';
+
+    if ($currentVersion === $targetVersion) {
+        return;
+    }
+
+    cnp_install_logs_table();
+    update_option('cnp_pipeline_db_version', $targetVersion);
+}
+
+register_activation_hook(__FILE__, 'cnp_maybe_upgrade_logs_table');
+add_action('admin_init', 'cnp_maybe_upgrade_logs_table');
+
+function cnp_salvar_historico(array $dados): void
+{
+    global $wpdb;
+
+    $table = cnp_logs_table_name();
+
+    $dados = wp_parse_args($dados, [
+        'status' => 'ok',
+        'coletadas' => 0,
+        'criadas' => 0,
+        'atualizados' => 0,
+        'ignorados' => 0,
+        'mensagem' => '',
+    ]);
+
+    $wpdb->insert(
+        $table,
+        [
+            'executed_at' => current_time('mysql'),
+            'status' => (string) $dados['status'],
+            'coletadas' => (int) $dados['coletadas'],
+            'criadas' => (int) $dados['criadas'],
+            'atualizados' => (int) $dados['atualizados'],
+            'ignorados' => (int) $dados['ignorados'],
+            'mensagem' => (string) $dados['mensagem'],
+        ],
+        ['%s', '%s', '%d', '%d', '%d', '%d', '%s']
+    );
+}
+
+add_action('admin_menu', function (): void {
     add_menu_page(
-        'Central de Notícias',
-        'Central de Notícias',
+        'Central de Noticias',
+        'Central de Noticias',
         'edit_others_posts',
         'central-noticias',
         'cnp_render_page',
@@ -26,203 +109,126 @@ add_action('admin_menu', function () {
 
     add_submenu_page(
         'central-noticias',
-        'Histórico',
-        'Histórico',
+        'Historico',
+        'Historico',
         'edit_others_posts',
         'central-noticias-historico',
         'cnp_render_historico'
     );
 });
 
-// ================== TELA PRINCIPAL =================
-function cnp_render_page()
+function cnp_render_page(): void
 {
     if (!cnp_user_can_run()) {
-        wp_die('Sem permissão.');
+        wp_die('Sem permissao.');
     }
 
     echo '<div class="wrap">';
-    echo '<h1>Central de Notícias</h1>';
+    echo '<h1>Central de Noticias</h1>';
 
     if (isset($_POST['executar_pipeline'])) {
+        check_admin_referer('cnp_run_pipeline');
 
-        require_once ABSPATH . '../automacao/pipeline.php';
-
-        if (!function_exists('runPipeline')) {
-            echo '<div class="notice notice-error"><p>Pipeline não encontrado.</p></div>';
+        $pipelinePath = cnp_pipeline_file_path();
+        if (!is_file($pipelinePath)) {
+            echo '<div class="notice notice-error"><p>Pipeline nao encontrado.</p></div>';
         } else {
+            require_once $pipelinePath;
 
-            $resultado = runPipeline();
+            if (!function_exists('runPipeline')) {
+                echo '<div class="notice notice-error"><p>Pipeline nao encontrado.</p></div>';
+            } else {
+                $resultado = runPipeline();
 
-            if ($resultado['status'] === 'locked') {
-                echo '<div class="notice notice-warning"><p>' . esc_html($resultado['mensagem']) . '</p></div>';
+                if (($resultado['status'] ?? '') === 'locked') {
+                    echo '<div class="notice notice-warning"><p>' . esc_html((string) ($resultado['mensagem'] ?? 'Pipeline em execucao.')) . '</p></div>';
+                } elseif (($resultado['status'] ?? '') === 'error') {
+                    echo '<div class="notice notice-error"><p>' . esc_html((string) ($resultado['mensagem'] ?? 'Falha ao executar pipeline.')) . '</p></div>';
+                } else {
+                    echo '<div class="notice notice-success">';
+                    echo '<p><strong>Atualizacao concluida.</strong></p>';
+                    echo '<ul>';
+                    echo '<li>Noticias coletadas: ' . (int) ($resultado['coletadas'] ?? 0) . '</li>';
+                    echo '<li>Noticias criadas (pendentes): ' . (int) ($resultado['criadas'] ?? 0) . '</li>';
+                    echo '<li>Noticias atualizadas: ' . (int) ($resultado['atualizados'] ?? 0) . '</li>';
+                    echo '<li>Ignoradas: ' . (int) ($resultado['ignorados'] ?? 0) . '</li>';
+                    echo '</ul>';
+                    echo '</div>';
+
+                    cnp_salvar_historico($resultado);
+                }
             }
-            elseif ($resultado['status'] === 'error') {
-                echo '<div class="notice notice-error"><p>' . esc_html($resultado['mensagem']) . '</p></div>';
-            }
-            else {
-                echo '<div class="notice notice-success">';
-                echo '<p><strong>Atualização concluída.</strong></p>';
-                echo '<ul>';
-                echo '<li>Notícias coletadas: ' . ($resultado['coletadas'] ?? 0) . '</li>';
-                echo '<li>Notícias criadas (pendentes): ' . ($resultado['criadas'] ?? 0) . '</li>';
-                echo '<li>Notícias atualizadas: ' . ($resultado['atualizados'] ?? 0) . '</li>';
-                echo '<li>Ignoradas: ' . ($resultado['ignorados'] ?? 0) . '</li>';
-                echo '</ul>';
-                echo '</div>';
-
-                cnp_salvar_historico($resultado);
-            }
-
         }
     }
 
     echo '<form method="post">';
-    echo '<p>Este botão busca novas notícias, reformula o conteúdo e manda para a revisão.</p>';
-    echo '<p><strong>A operação pode levar até 1 minuto.</strong></p>';
-    echo '<button class="button button-primary button-hero" name="executar_pipeline">';
-    echo 'Atualizar Notícias Agora';
-    echo '</button>';
+    wp_nonce_field('cnp_run_pipeline');
+    echo '<p>Este botao busca novas noticias, reformula o conteudo e envia para revisao.</p>';
+    echo '<p><strong>A operacao pode levar ate 1 minuto.</strong></p>';
+    echo '<button class="button button-primary button-hero" name="executar_pipeline">Atualizar Noticias Agora</button>';
     echo '</form>';
-
     echo '</div>';
 }
 
-// ================== HISTÓRICO (DB) =================
-register_activation_hook(__FILE__, function () {
-    global $wpdb;
-
-    $table = $wpdb->prefix . 'pipeline_logs';
-    $charset = $wpdb->get_charset_collate();
-
-    require_once ABSPATH . 'wp-admin/includes/upgrade.php';
-
-    dbDelta("
-        CREATE TABLE IF NOT EXISTS $table (
-            id BIGINT AUTO_INCREMENT PRIMARY KEY,
-            executed_at DATETIME NOT NULL,
-            status VARCHAR(20),
-            criados INT DEFAULT 0,
-            atualizados INT DEFAULT 0,
-            ignorados INT DEFAULT 0,
-            mensagem TEXT
-        ) $charset;
-    ");
-});
-
-function cnp_salvar_historico(array $dados): void
+function cnp_render_historico(): void
 {
     global $wpdb;
 
-    $wpdb->insert(
-        $wpdb->prefix . 'pipeline_logs',
-        [
-            'executed_at' => current_time('mysql'),
-            'status'      => $dados['status'],
-            'coletadas'   => $dados['coletadas'],
-            'criadas'     => $dados['criadas'],
-            'atualizados' => $dados['atualizados'],
-            'ignorados'   => $dados['ignorados'],
-            'mensagem'    => $dados['mensagem'],
-        ]
-    );
-}
-
-// ================== TELA HISTÓRICO =================
-function cnp_render_historico()
-{
-    global $wpdb;
-
-    $table = $wpdb->prefix . 'pipeline_logs';
-    $logs = $wpdb->get_results(
-        "SELECT * FROM $table ORDER BY executed_at DESC LIMIT 50"
-    );
+    $table = cnp_logs_table_name();
+    $logs = $wpdb->get_results("SELECT * FROM {$table} ORDER BY executed_at DESC LIMIT 50");
 
     echo '<div class="wrap">';
-    echo '<h1>Histórico de Execuções</h1>';
-
+    echo '<h1>Historico de Execucoes</h1>';
     echo '<table class="widefat striped">';
-    echo '<thead>
-        <tr>
-            <th>Data</th>
-            <th>Status</th>
-            <th>Coletadas</th>
-            <th>Criadas</th>
-            <th>Atualizados</th>
-            <th>Ignorados</th>
-            <th>Mensagem</th>
-        </tr>
-    </thead><tbody>';
+    echo '<thead><tr>';
+    echo '<th>Data</th><th>Status</th><th>Coletadas</th><th>Criadas</th><th>Atualizados</th><th>Ignorados</th><th>Mensagem</th>';
+    echo '</tr></thead><tbody>';
 
     if (!$logs) {
-        echo '<tr><td colspan="7">Nenhum histórico encontrado.</td></tr>';
-    }
+        echo '<tr><td colspan="7">Nenhum historico encontrado.</td></tr>';
+    } else {
+        foreach ($logs as $log) {
+            $status = (string) ($log->status ?? '');
+            $statusColor = $status === 'ok' ? '#2ecc71' : '#e74c3c';
 
-    foreach ($logs as $log) {
-
-        $statusColor = $log->status === 'ok' ? '#2ecc71' : '#e74c3c';
-
-        echo '<tr>';
-        echo '<td>' . esc_html($log->executed_at) . '</td>';
-        echo '<td style="color:' . $statusColor . ';">' . esc_html($log->status) . '</td>';
-        echo '<td>' . intval($log->coletadas ?? 0) . '</td>';
-        echo '<td>' . intval($log->criadas ?? 0) . '</td>';
-        echo '<td>' . intval($log->atualizados ?? 0) . '</td>';
-        echo '<td>' . intval($log->ignorados ?? 0) . '</td>';
-        echo '<td>' . esc_html($log->mensagem ?? '') . '</td>';
-        echo '</tr>';
+            echo '<tr>';
+            echo '<td>' . esc_html((string) ($log->executed_at ?? '')) . '</td>';
+            echo '<td style="color:' . esc_attr($statusColor) . ';">' . esc_html($status) . '</td>';
+            echo '<td>' . (int) ($log->coletadas ?? 0) . '</td>';
+            echo '<td>' . (int) ($log->criadas ?? 0) . '</td>';
+            echo '<td>' . (int) ($log->atualizados ?? 0) . '</td>';
+            echo '<td>' . (int) ($log->ignorados ?? 0) . '</td>';
+            echo '<td>' . esc_html((string) ($log->mensagem ?? '')) . '</td>';
+            echo '</tr>';
+        }
     }
 
     echo '</tbody></table>';
     echo '</div>';
-
-    add_action('transition_post_status', function ($new_status, $old_status, $post) {
-
-    if ($new_status !== 'publish') {
-        return;
-    }
-
-    if ($post->post_type !== 'post') {
-        return;
-    }
-
-    if (get_post_meta($post->ID, '_tipo_publicacao', true) !== 'automacao') {
-        return;
-    }
-
-    global $wpdb;
-
-    $table = $wpdb->prefix . 'pipeline_logs';
-
-    $wpdb->insert(
-        $table,
-        [
-            'executed_at' => current_time('mysql'),
-            'status'      => 'publicado',
-            'criadas'     => 0,
-            'atualizados' => 1,
-            'ignorados'   => 0,
-            'mensagem'    => 'Post publicado após revisão: ' . $post->post_title
-        ]
-    );
-
-    }, 10, 3);
-
-    add_action('transition_post_status', function ($new, $old, $post) {
-        if ($old === 'pending' && $new === 'publish') {
-            cnp_salvar_historico([
-                'status'       => 'publicado',
-                'criadas'      => 0,
-                'atualizadas'  => 1,
-                'ignoradas'    => 0,
-                'mensagem'     => 'Notícia revisada e publicada manualmente'
-            ]);
-        }
-    }, 10, 3);
-
-
-
-
 }
 
+function cnp_registrar_publicacao_manual(string $new_status, string $old_status, $post): void
+{
+    if ($old_status !== 'pending' || $new_status !== 'publish') {
+        return;
+    }
 
+    if (!$post instanceof WP_Post || $post->post_type !== 'post') {
+        return;
+    }
+
+    if (get_post_meta($post->ID, '_conteudo_ia', true) !== 'sim') {
+        return;
+    }
+
+    cnp_salvar_historico([
+        'status' => 'publicado',
+        'coletadas' => 0,
+        'criadas' => 0,
+        'atualizados' => 1,
+        'ignorados' => 0,
+        'mensagem' => 'Noticia revisada e publicada manualmente: ' . $post->post_title,
+    ]);
+}
+
+add_action('transition_post_status', 'cnp_registrar_publicacao_manual', 10, 3);

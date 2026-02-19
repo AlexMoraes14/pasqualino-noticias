@@ -148,6 +148,8 @@ function reformularComHuggingFace($texto)
 ================================ */
 function callApi($url, $headers, $payload, $extractor, $fallback)
 {
+    $verifySsl = !defined('IA_DISABLE_SSL_VERIFY') || IA_DISABLE_SSL_VERIFY !== true;
+
     $ch = curl_init($url);
     curl_setopt_array($ch, [
         CURLOPT_RETURNTRANSFER => true,
@@ -155,7 +157,8 @@ function callApi($url, $headers, $payload, $extractor, $fallback)
         CURLOPT_HTTPHEADER => $headers,
         CURLOPT_POSTFIELDS => json_encode($payload),
         CURLOPT_TIMEOUT => 60,
-        CURLOPT_SSL_VERIFYPEER => false // LOCAL ONLY
+        CURLOPT_SSL_VERIFYPEER => $verifySsl,
+        CURLOPT_SSL_VERIFYHOST => $verifySsl ? 2 : 0,
     ]);
 
     $response = curl_exec($ch);

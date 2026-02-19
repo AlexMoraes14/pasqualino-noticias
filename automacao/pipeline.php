@@ -14,6 +14,7 @@ date_default_timezone_set('America/Sao_Paulo');
 require_once __DIR__ . '/config/config.php';
 require_once __DIR__ . '/ia/reformular.php';
 require_once __DIR__ . '/publish/publicar_wp.php';
+require_once __DIR__ . '/scrap/scrap_econet.php';
 
 // ================= LOG ====================
 if (!defined('LOG_DIR')) {
@@ -31,6 +32,20 @@ function logPipeline(string $msg): void
         '[' . date('Y-m-d H:i:s') . '] ' . $msg . PHP_EOL,
         FILE_APPEND
     );
+}
+
+function coletarNoticiasEconet(): array
+{
+    if (!function_exists('cnp_scrap_econet_noticias')) {
+        throw new RuntimeException('Scraper da Econet nao carregado.');
+    }
+
+    $noticias = cnp_scrap_econet_noticias();
+    if (!is_array($noticias)) {
+        throw new RuntimeException('Retorno invalido do scraper da Econet.');
+    }
+
+    return $noticias;
 }
 
 // ================= PIPELINE =================
@@ -51,12 +66,7 @@ function runPipeline(): array
         logPipeline('PIPELINE START');
 
         // SCRAP
-        $json = @file_get_contents('http://localhost/noticias/automacao/scrap/scrap_econet.php');
-        if ($json === false) {
-            throw new Exception('Falha ao executar o scraper');
-        }
-
-        $noticias = json_decode($json, true);
+        $noticias = coletarNoticiasEconet();
         if (!is_array($noticias) || empty($noticias)) {
             return [
                 'status' => 'ok',
