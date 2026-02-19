@@ -81,6 +81,17 @@ if (!defined('HF_API_KEY')) {
     define('HF_API_KEY', getenv('HF_API_KEY') ?: '');
 }
 
+if (!defined('HF_MODEL')) {
+    define('HF_MODEL', getenv('HF_MODEL') ?: 'mistralai/Mistral-7B-Instruct-v0.2');
+}
+
+if (!defined('HF_CHAT_COMPLETIONS_URL')) {
+    define(
+        'HF_CHAT_COMPLETIONS_URL',
+        getenv('HF_CHAT_COMPLETIONS_URL') ?: 'https://router.huggingface.co/v1/chat/completions'
+    );
+}
+
 if (!defined('IA_DISABLE_SSL_VERIFY')) {
     define('IA_DISABLE_SSL_VERIFY', getenv('IA_DISABLE_SSL_VERIFY') === '1');
 }

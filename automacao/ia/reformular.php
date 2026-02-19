@@ -123,24 +123,56 @@ function reformularComHuggingFace($texto)
         . $texto;
 
     $payload = [
-        "inputs" => $prompt,
-        "parameters" => [
-            "temperature" => 0.6,
-            "max_new_tokens" => 400,
-            "return_full_text" => false
-        ]
+        'model' => (string) HF_MODEL,
+        'messages' => [
+            ['role' => 'system', 'content' => 'VocÃª Ã© um redator jornalÃ­stico profissional.'],
+            ['role' => 'user', 'content' => $prompt],
+        ],
+        'temperature' => 0.6,
+        'max_tokens' => 400,
+        'stream' => false,
     ];
 
     return callApi(
-        'https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.2',
+        cnp_hf_chat_completions_url(),
         [
             'Authorization: Bearer ' . HF_API_KEY,
             'Content-Type: application/json'
         ],
         $payload,
-        fn ($data) => $data[0]['generated_text'] ?? null,
+        'cnp_extract_hf_generated_text',
         $texto
     );
+}
+
+function cnp_hf_chat_completions_url(): string
+{
+    return rtrim((string) HF_CHAT_COMPLETIONS_URL, '/');
+}
+
+function cnp_extract_hf_generated_text($data): ?string
+{
+    if (!is_array($data)) {
+        return null;
+    }
+
+    if (isset($data[0]['generated_text']) && is_string($data[0]['generated_text'])) {
+        return $data[0]['generated_text'];
+    }
+
+    if (isset($data['generated_text']) && is_string($data['generated_text'])) {
+        return $data['generated_text'];
+    }
+
+    if (isset($data['choices'][0]['text']) && is_string($data['choices'][0]['text'])) {
+        return $data['choices'][0]['text'];
+    }
+
+    if (isset($data['choices'][0]['message']['content']) && is_string($data['choices'][0]['message']['content'])) {
+        return $data['choices'][0]['message']['content'];
+    }
+
+    return null;
 }
 
 /* ===============================
@@ -162,6 +194,11 @@ function callApi($url, $headers, $payload, $extractor, $fallback)
     ]);
 
     $response = curl_exec($ch);
+    if ($response === false) {
+        curl_close($ch);
+        return $fallback;
+    }
+
     curl_close($ch);
 
     $data = json_decode($response, true);

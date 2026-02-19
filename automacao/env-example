@@ -1,6 +1,8 @@
 OPENAI_API_KEY=
 HF_API_KEY=
 IA_PROVIDER=
+HF_MODEL=mistralai/Mistral-7B-Instruct-v0.2
+HF_CHAT_COMPLETIONS_URL=https://router.huggingface.co/v1/chat/completions
 IA_DISABLE_SSL_VERIFY=0
 WP_AUTHOR_ID=
 WP_DEFAULT_CATEGORY=
