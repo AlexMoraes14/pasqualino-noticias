@@ -73,44 +73,6 @@ body.topo-reduzido {
   margin-left: auto;
 }
 
-.topo-sociais-wrap {
-  position: relative;
-  width: 165px;
-  display: block;
-  line-height: 0;
-  transition: width .22s ease;
-}
-
-.topo-sociais {
-  display: block;
-  width: 100%;
-  height: auto;
-}
-
-.social-hit {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  border-radius: 999px;
-  z-index: 2;
-  cursor: pointer;
-}
-
-.social-facebook {
-  left: 0;
-  width: 31%;
-}
-
-.social-instagram {
-  left: 34.5%;
-  width: 31%;
-}
-
-.social-whatsapp {
-  right: 0;
-  width: 31%;
-}
-
 .btn-login {
   display: inline-flex;
   align-items: center;
@@ -143,10 +105,6 @@ body.topo-reduzido .topo {
 
 body.topo-reduzido .logo-box img {
   height: 44px;
-}
-
-body.topo-reduzido .topo-sociais-wrap {
-  width: 150px;
 }
 
 body.topo-reduzido .btn-login {
@@ -404,10 +362,6 @@ body.topo-reduzido .btn-login {
     gap: 12px;
   }
 
-  .topo-sociais-wrap {
-    width: 150px;
-  }
-
   .noticias-layout {
     flex-direction: column;
     gap: 16px;
@@ -461,8 +415,8 @@ body.topo-reduzido .btn-login {
 
 @media (max-width: 720px) {
   :root {
-    --topo-fixo-altura: 168px;
-    --topo-fixo-altura-scroll: 150px;
+    --topo-fixo-altura: 140px;
+    --topo-fixo-altura-scroll: 122px;
   }
 
   .topo {
@@ -472,16 +426,8 @@ body.topo-reduzido .btn-login {
 
   .topo-acoes {
     width: 100%;
-    justify-content: space-between;
+    justify-content: flex-end;
     margin-left: 0;
-  }
-
-  .topo-sociais {
-    width: 100%;
-  }
-
-  .topo-sociais-wrap {
-    width: 134px;
   }
 
   .btn-login {
@@ -493,9 +439,5 @@ body.topo-reduzido .btn-login {
     padding: 14px 18px;
     border-bottom-left-radius: 24px;
     border-bottom-right-radius: 24px;
-  }
-
-  body.topo-reduzido .topo-sociais-wrap {
-    width: 126px;
   }
 }
