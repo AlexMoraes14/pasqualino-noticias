@@ -21,6 +21,90 @@ document.addEventListener('DOMContentLoaded', () => {
   let adminAutenticado = false;
   let botaoConfirmacaoTextoOriginal = '';
 
+  function escapeHtml(texto) {
+    return (texto || '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  function normalizarMarcacaoMarkdown(texto) {
+    return (texto || '')
+      .replace(/(^|[\r\n>])\s{0,3}#{1,6}\s+/g, '$1')
+      .replace(/\*\*([^*]+?)\*\*/g, '$1')
+      .replace(/\*\*/g, '');
+  }
+
+  function prepararConteudoHtml(conteudoHtml) {
+    const html = normalizarMarcacaoMarkdown((conteudoHtml || '').trim());
+    if (!html) return '';
+
+    const temp = document.createElement('div');
+    temp.innerHTML = html;
+
+    temp.querySelectorAll('table').forEach((table) => {
+      if (table.closest('.tabela-scroll')) return;
+      const wrapper = document.createElement('div');
+      wrapper.className = 'tabela-scroll';
+      table.parentNode.insertBefore(wrapper, table);
+      wrapper.appendChild(table);
+    });
+
+    return temp.innerHTML.trim();
+  }
+
+  function htmlParaTextoComQuebras(html) {
+    const temp = document.createElement('div');
+    temp.innerHTML = html || '';
+
+    temp.querySelectorAll('br').forEach((el) => {
+      el.replaceWith('\n');
+    });
+
+    temp.querySelectorAll('td,th').forEach((el) => {
+      el.appendChild(document.createTextNode(' | '));
+    });
+
+    temp.querySelectorAll('p,div,section,article,li,tr,h1,h2,h3,h4,h5,h6').forEach((el) => {
+      el.appendChild(document.createTextNode('\n'));
+    });
+
+    return (temp.textContent || temp.innerText || '')
+      .replace(/\u00A0/g, ' ')
+      .replace(/[ \t]+\n/g, '\n')
+      .replace(/\n{3,}/g, '\n\n')
+      .trim();
+  }
+
+  function montarHtmlVisualizacao(noticia) {
+    const htmlTratado = prepararConteudoHtml(noticia.conteudo_html);
+    if (htmlTratado) {
+      return `<div class="conteudo-visualizacao">${htmlTratado}</div>`;
+    }
+
+    const texto = normalizarMarcacaoMarkdown((noticia.texto || '').trim());
+    if (!texto) {
+      return '<div class="conteudo-visualizacao"><p>Conte\u00fado indispon\u00edvel.</p></div>';
+    }
+
+    const textoHtml = escapeHtml(texto)
+      .replace(/\n{2,}/g, '</p><p>')
+      .replace(/\n/g, '<br>');
+
+    return `<div class="conteudo-visualizacao"><p>${textoHtml}</p></div>`;
+  }
+
+  function textoParaEdicao(noticia) {
+    const htmlTratado = prepararConteudoHtml(noticia.conteudo_html);
+    if (htmlTratado) {
+      return normalizarMarcacaoMarkdown(htmlParaTextoComQuebras(htmlTratado));
+    }
+
+    return normalizarMarcacaoMarkdown((noticia.texto || '').trim());
+  }
+
   function aplicarFeedbackClique(el) {
     if (!el) return;
     el.classList.remove('is-pressed');
@@ -119,8 +203,8 @@ document.addEventListener('DOMContentLoaded', () => {
   if (btnSair) {
     btnSair.addEventListener('click', () => {
       abrirConfirmacao({
-        titulo: 'Sair da area administrativa?',
-        mensagem: 'Voce precisara entrar novamente para continuar.',
+        titulo: 'Sair da \u00e1rea administrativa?',
+        mensagem: 'Voc\u00ea precisar\u00e1 entrar novamente para continuar.',
         textoBotao: 'Sair',
         onConfirm: executarLogout
       });
@@ -194,7 +278,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             setEstadoBotao(btnAprovar, 'is-success');
             removerCardSuave(card, () => {
-              garantirMensagemVazia(pendentesEl, 'Nenhuma noticia pendente');
+              garantirMensagemVazia(pendentesEl, 'Nenhuma not\u00edcia pendente');
             });
             setTimeout(() => carregarPublicadas(), 320);
           })
@@ -202,7 +286,7 @@ document.addEventListener('DOMContentLoaded', () => {
             setEstadoBotao(btnAprovar, 'is-error');
             btnAprovar.disabled = false;
             console.error('Erro ao aprovar:', err);
-            alert('Erro ao aprovar noticia: ' + err.message);
+            alert('Erro ao aprovar not\u00edcia: ' + err.message);
           });
       });
 
@@ -218,13 +302,13 @@ document.addEventListener('DOMContentLoaded', () => {
         aplicarFeedbackClique(btnIgnorar);
 
         abrirConfirmacao({
-          titulo: 'Ignorar noticia?',
-          mensagem: 'Essa acao nao podera ser desfeita.',
+          titulo: 'Ignorar not\u00edcia?',
+          mensagem: 'Essa a\u00e7\u00e3o n\u00e3o poder\u00e1 ser desfeita.',
           textoBotao: 'Ignorar',
           onConfirm: () => ignorarNoticia(noticia.id).then((sucesso) => {
-            if (!sucesso) throw new Error('Nao foi possivel ignorar a noticia');
+            if (!sucesso) throw new Error('N\u00e3o foi poss\u00edvel ignorar a not\u00edcia');
             removerCardSuave(card, () => {
-              garantirMensagemVazia(pendentesEl, 'Nenhuma noticia pendente');
+              garantirMensagemVazia(pendentesEl, 'Nenhuma not\u00edcia pendente');
             });
           })
         });
@@ -246,14 +330,14 @@ document.addEventListener('DOMContentLoaded', () => {
         aplicarFeedbackClique(btnExcluir);
 
         abrirConfirmacao({
-          titulo: 'Excluir noticia?',
-          mensagem: 'Essa acao nao podera ser desfeita.',
+          titulo: 'Excluir not\u00edcia?',
+          mensagem: 'Essa a\u00e7\u00e3o n\u00e3o poder\u00e1 ser desfeita.',
           textoBotao: 'Excluir',
           onConfirm: () => excluirNoticia(noticia.id).then((sucesso) => {
-            if (!sucesso) throw new Error('Nao foi possivel excluir a noticia');
+            if (!sucesso) throw new Error('N\u00e3o foi poss\u00edvel excluir a not\u00edcia');
             setEstadoBotao(btnExcluir, 'is-success');
             removerCardSuave(card, () => {
-              garantirMensagemVazia(publicadasEl, 'Nenhuma noticia publicada');
+              garantirMensagemVazia(publicadasEl, 'Nenhuma not\u00edcia publicada');
             });
           })
         });
@@ -280,7 +364,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function abrirModalVisualizacao(noticia) {
     modalTitulo.textContent = noticia.titulo;
-    modalTexto.innerHTML = `<p>${noticia.texto}</p>`;
+    modalTexto.innerHTML = montarHtmlVisualizacao(noticia);
     modal.classList.add('show');
     overlay.classList.add('show');
   }
@@ -291,17 +375,20 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function abrirModalEdicao(noticia) {
+    const tituloAtual = escapeHtml((noticia.titulo || '').trim());
+    const conteudoAtual = escapeHtml(textoParaEdicao(noticia));
+
     modalTitulo.innerHTML = `
-      <label>Titulo</label>
-      <input id="editTitulo" value="${noticia.titulo}">
+      <label class="modal-label">T\u00edtulo</label>
+      <input id="editTitulo" value="${tituloAtual}">
     `;
 
     modalTexto.innerHTML = `
-      <label>Conteudo</label>
-      <textarea id="editTexto">${noticia.texto}</textarea>
+      <label class="modal-label">Conte\u00fado</label>
+      <textarea id="editTexto">${conteudoAtual}</textarea>
       <div class="modal-acoes">
         <button class="btn-secundario" id="btnFecharInterno">Fechar</button>
-        <button class="btn-principal" id="btnSalvar">Salvar alteracoes</button>
+        <button class="btn-principal" id="btnSalvar">Salvar altera\u00e7\u00f5es</button>
       </div>
     `;
 
@@ -317,7 +404,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const texto = document.getElementById('editTexto').value;
 
     if (!titulo.trim() || !texto.trim()) {
-      alert('Titulo e conteudo sao obrigatorios');
+      alert('T\u00edtulo e conte\u00fado s\u00e3o obrigat\u00f3rios');
       return;
     }
 
@@ -344,7 +431,7 @@ document.addEventListener('DOMContentLoaded', () => {
       })
       .catch((err) => {
         console.error('Erro ao salvar:', err);
-        alert('Erro ao salvar noticia: ' + err.message);
+        alert('Erro ao salvar not\u00edcia: ' + err.message);
       });
   }
 
@@ -388,7 +475,7 @@ document.addEventListener('DOMContentLoaded', () => {
       })
       .catch((err) => {
         console.error('Erro ao ignorar:', err);
-        alert('Erro ao ignorar noticia: ' + err.message);
+        alert('Erro ao ignorar not\u00edcia: ' + err.message);
         return false;
       });
   }
@@ -415,7 +502,7 @@ document.addEventListener('DOMContentLoaded', () => {
       })
       .catch((err) => {
         console.error('Erro ao excluir:', err);
-        alert('Erro ao excluir noticia: ' + err.message);
+        alert('Erro ao excluir not\u00edcia: ' + err.message);
         return false;
       });
   }
@@ -462,13 +549,22 @@ document.addEventListener('DOMContentLoaded', () => {
     pendentesEl.innerHTML = '<p style="text-align:center;color:#999;">Carregando...</p>';
 
     fetch('../api/listar_pendentes.php')
-      .then((r) => r.json())
+      .then(async (r) => {
+        const data = await r.json();
+        if (!r.ok) {
+          throw new Error((data && data.message) || `Erro HTTP: ${r.status}`);
+        }
+        if (!Array.isArray(data)) {
+          throw new Error((data && data.message) || 'Resposta invalida para pendentes');
+        }
+        return data;
+      })
       .then((lista) => {
         pendentesEl.innerHTML = '';
         if (lista && lista.length > 0) {
           lista.forEach((n) => pendentesEl.appendChild(criarCard(n, true)));
         } else {
-          pendentesEl.innerHTML = '<p style="text-align:center;color:#999;">Nenhuma noticia pendente</p>';
+          pendentesEl.innerHTML = '<p style="text-align:center;color:#999;">Nenhuma not\u00edcia pendente</p>';
         }
       })
       .catch((err) => {
@@ -488,13 +584,22 @@ document.addEventListener('DOMContentLoaded', () => {
     publicadasEl.innerHTML = '<p style="text-align:center;color:#999;">Carregando...</p>';
 
     fetch('../api/listar_publicadas.php')
-      .then((r) => r.json())
+      .then(async (r) => {
+        const data = await r.json();
+        if (!r.ok) {
+          throw new Error((data && data.message) || `Erro HTTP: ${r.status}`);
+        }
+        if (!Array.isArray(data)) {
+          throw new Error((data && data.message) || 'Resposta invalida para publicadas');
+        }
+        return data;
+      })
       .then((lista) => {
         publicadasEl.innerHTML = '';
         if (lista && lista.length > 0) {
           lista.forEach((n) => publicadasEl.appendChild(criarCard(n, false)));
         } else {
-          publicadasEl.innerHTML = '<p style="text-align:center;color:#999;">Nenhuma noticia publicada</p>';
+          publicadasEl.innerHTML = '<p style="text-align:center;color:#999;">Nenhuma not\u00edcia publicada</p>';
         }
       })
       .catch((err) => {
@@ -511,7 +616,7 @@ document.addEventListener('DOMContentLoaded', () => {
       .then((r) => {
         const ct = r.headers.get('content-type') || '';
         if (!ct.includes('application/json')) {
-          throw new Error('Resposta invalida de autenticacao');
+          throw new Error('Resposta inv\u00e1lida de autentica\u00e7\u00e3o');
         }
         return r.json().then((dataResp) => ({ ok: r.ok, dataResp }));
       })

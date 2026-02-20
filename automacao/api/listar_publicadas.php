@@ -1,37 +1,50 @@
 <?php
 declare(strict_types=1);
 
-require_once __DIR__ . '/_auth.php';
-require_once __DIR__ . '/../../wordpress/wp-load.php';
+require_once __DIR__ . '/../config/integracao.php';
 
 header('Content-Type: application/json; charset=utf-8');
 
-$args = [
-    'post_type' => 'post',
-    'post_status' => 'publish',
-    'posts_per_page' => 50,
-    'meta_query' => [
-        [
-            'key' => '_conteudo_ia',
-            'value' => 'sim',
-        ],
-    ],
-];
+try {
+    if (!cnp_integracao_db_is_configured()) {
+        echo json_encode([]);
+        exit;
+    }
 
-$query = new WP_Query($args);
-$saida = [];
+    $pdo = cnp_integracao_db_pdo();
+    cnp_integracao_db_ensure_schema($pdo);
+    $table = cnp_integracao_db_table_noticias();
 
-foreach ($query->posts as $post) {
-    $textoLimpo = wp_strip_all_tags($post->post_content, true);
-    $conteudoHtml = wp_kses_post((string) $post->post_content);
+    $stmt = $pdo->prepare("
+        SELECT id, titulo, conteudo_final, data_fonte
+        FROM `{$table}`
+        WHERE status = 'published'
+        ORDER BY STR_TO_DATE(data_fonte, '%d/%m/%Y') DESC, published_at DESC, updated_at DESC
+        LIMIT 200
+    ");
+    $stmt->execute();
+    $rows = $stmt->fetchAll();
 
-    $saida[] = [
-        'id' => $post->ID,
-        'titulo' => $post->post_title,
-        'texto' => trim($textoLimpo),
-        'conteudo_html' => $conteudoHtml,
-        'data' => get_the_date('d/m/Y', $post->ID),
-    ];
+    $saida = [];
+    foreach ($rows as $row) {
+        $conteudoHtml = (string) ($row['conteudo_final'] ?? '');
+        $textoLimpo = trim((string) preg_replace('/\s+/u', ' ', strip_tags($conteudoHtml)));
+
+        $saida[] = [
+            'id' => (int) ($row['id'] ?? 0),
+            'titulo' => (string) ($row['titulo'] ?? ''),
+            'texto' => $textoLimpo,
+            'conteudo_html' => $conteudoHtml,
+            'data' => (string) ($row['data_fonte'] ?? ''),
+        ];
+    }
+
+    echo json_encode($saida, JSON_UNESCAPED_UNICODE);
+} catch (Throwable $e) {
+    http_response_code(500);
+    echo json_encode([
+        'success' => false,
+        'message' => $e->getMessage(),
+    ]);
 }
 
-echo json_encode($saida);

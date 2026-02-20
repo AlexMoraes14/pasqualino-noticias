@@ -96,6 +96,18 @@ if (!defined('IA_DISABLE_SSL_VERIFY')) {
     define('IA_DISABLE_SSL_VERIFY', getenv('IA_DISABLE_SSL_VERIFY') === '1');
 }
 
+if (!defined('IA_HTTP_TIMEOUT')) {
+    define('IA_HTTP_TIMEOUT', max(5, (int) (getenv('IA_HTTP_TIMEOUT') ?: 20)));
+}
+
+if (!defined('IA_CONNECT_TIMEOUT')) {
+    define('IA_CONNECT_TIMEOUT', max(3, (int) (getenv('IA_CONNECT_TIMEOUT') ?: 8)));
+}
+
+if (!defined('PIPELINE_MAX_PROCESS_PER_RUN')) {
+    define('PIPELINE_MAX_PROCESS_PER_RUN', max(1, (int) (getenv('PIPELINE_MAX_PROCESS_PER_RUN') ?: 4)));
+}
+
 if (!defined('WP_AUTHOR_ID')) {
     define('WP_AUTHOR_ID', max(1, (int) (getenv('WP_AUTHOR_ID') ?: 1)));
 }

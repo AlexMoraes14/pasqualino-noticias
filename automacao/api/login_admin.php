@@ -39,15 +39,9 @@ if (!cnp_has_panel_access_role(cnp_role_for_email($email))) {
     exit;
 }
 
-if (!cnp_verify_panel_password($password)) {
-    http_response_code(403);
-    echo json_encode(['success' => false, 'message' => 'Senha incorreta']);
-    exit;
-}
-
 if (!cnp_admin_login($email, $password)) {
     http_response_code(403);
-    echo json_encode(['success' => false, 'message' => 'Credenciais invalidas']);
+    echo json_encode(['success' => false, 'message' => 'Senha incorreta']);
     exit;
 }
 

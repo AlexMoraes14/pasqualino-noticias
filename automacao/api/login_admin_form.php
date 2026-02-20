@@ -32,13 +32,8 @@ if (!cnp_has_panel_access_role($role)) {
     exit;
 }
 
-if (!cnp_verify_panel_password($password)) {
-    header('Location: ../HTML/index.html?erro=senha', true, 303);
-    exit;
-}
-
 if (!cnp_admin_login($email, $password)) {
-    header('Location: ../HTML/index.html?erro=cred', true, 303);
+    header('Location: ../HTML/index.html?erro=senha', true, 303);
     exit;
 }
 

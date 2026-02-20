@@ -19,8 +19,11 @@
     <div class="admin-info">Admin Pasqualino</div>
 
     <div class="topo-acoes">
+      <button class="btn-principal" id="btnConfig" type="button">
+        Integra&ccedil;&otilde;es
+      </button>
       <button class="btn-principal" id="btnAtualizar">
-        Atualizar notícias
+        Atualizar not&iacute;cias
       </button>
       <button class="btn-principal" id="btnSair" type="button">
         Sair
@@ -54,8 +57,8 @@
   <div class="overlay" id="confirmOverlay"></div>
 
   <div class="editor" id="confirmModal">
-    <h3>Ignorar notícia?</h3>
-    <p>Essa ação não poderá ser desfeita.</p>
+    <h3>Ignorar not&iacute;cia?</h3>
+    <p>Essa a&ccedil;&atilde;o n&atilde;o poder&aacute; ser desfeita.</p>
 
     <div class="modal-acoes">
       <button class="btn-secundario" id="cancelarIgnorar">Cancelar</button>
@@ -63,8 +66,101 @@
     </div>
   </div>
 
+  <div class="overlay" id="configOverlay"></div>
+
+  <div class="editor" id="configModal">
+    <h3>Integra&ccedil;&otilde;es externas</h3>
+    <div class="config-grid">
+      <section class="config-bloco">
+        <h4>WordPress externo</h4>
+
+        <label class="modal-label" for="cfgWpBaseUrl">URL base do site (ex.: https://pasqualino.com.br/blog)</label>
+        <input id="cfgWpBaseUrl" type="url" placeholder="https://pasqualino.com.br/blog">
+
+        <label class="modal-label" for="cfgWpRestUser">Usu&aacute;rio REST</label>
+        <input id="cfgWpRestUser" type="text" placeholder="usuario-api">
+
+        <label class="modal-label" for="cfgWpAppPassword">Senha de aplica&ccedil;&atilde;o REST</label>
+        <input id="cfgWpAppPassword" type="password" placeholder="Cole apenas para alterar">
+
+        <div class="config-linha-3">
+          <div>
+            <label class="modal-label" for="cfgWpAuthorId">Autor ID</label>
+            <input id="cfgWpAuthorId" type="number" min="0" placeholder="0">
+          </div>
+          <div>
+            <label class="modal-label" for="cfgWpTimeout">Timeout API (s)</label>
+            <input id="cfgWpTimeout" type="number" min="10" placeholder="20">
+          </div>
+          <div>
+            <label class="modal-label" for="cfgWpCategoryFederal">Categoria Federal</label>
+            <input id="cfgWpCategoryFederal" type="number" min="0" placeholder="0">
+          </div>
+        </div>
+
+        <div class="config-linha-2">
+          <div>
+            <label class="modal-label" for="cfgWpCategoryTrabalhista">Categoria Trabalhista</label>
+            <input id="cfgWpCategoryTrabalhista" type="number" min="0" placeholder="0">
+          </div>
+          <div>
+            <label class="modal-label" for="cfgWpCategoryComex">Categoria Comex</label>
+            <input id="cfgWpCategoryComex" type="number" min="0" placeholder="0">
+          </div>
+        </div>
+      </section>
+
+      <section class="config-bloco">
+        <h4>Banco externo (phpMyAdmin)</h4>
+
+        <label class="modal-label" for="cfgDbHost">Host</label>
+        <input id="cfgDbHost" type="text" placeholder="127.0.0.1">
+
+        <div class="config-linha-2">
+          <div>
+            <label class="modal-label" for="cfgDbPort">Porta</label>
+            <input id="cfgDbPort" type="number" min="1" placeholder="3306">
+          </div>
+          <div>
+            <label class="modal-label" for="cfgDbCharset">Charset</label>
+            <input id="cfgDbCharset" type="text" placeholder="utf8mb4">
+          </div>
+        </div>
+
+        <label class="modal-label" for="cfgDbName">Database</label>
+        <input id="cfgDbName" type="text" placeholder="nome_do_banco">
+
+        <label class="modal-label" for="cfgDbUser">Usu&aacute;rio</label>
+        <input id="cfgDbUser" type="text" placeholder="usuario_db">
+
+        <label class="modal-label" for="cfgDbPassword">Senha</label>
+        <input id="cfgDbPassword" type="password" placeholder="Cole apenas para alterar">
+
+        <div class="config-linha-2">
+          <div>
+            <label class="modal-label" for="cfgDbTableNoticias">Tabela not&iacute;cias</label>
+            <input id="cfgDbTableNoticias" type="text" placeholder="cnp_noticias">
+          </div>
+          <div>
+            <label class="modal-label" for="cfgDbTableExecucoes">Tabela execu&ccedil;&otilde;es</label>
+            <input id="cfgDbTableExecucoes" type="text" placeholder="cnp_pipeline_execucoes">
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <p class="config-status" id="configStatus"></p>
+
+    <div class="modal-acoes">
+      <button class="btn-secundario" id="btnConfigFechar" type="button">Fechar</button>
+      <button class="btn-secundario" id="btnConfigTestar" type="button">Testar conex&atilde;o</button>
+      <button class="btn-principal" id="btnConfigSalvar" type="button">Salvar integra&ccedil;&otilde;es</button>
+    </div>
+  </div>
+
   <script src="../JS/admin-tabs.js"></script>
   <script src="../JS/admin-noticias.js"></script>
+  <script src="../JS/admin-config.js"></script>
   <script src="../JS/pipeline.js"></script>
 </body>
 

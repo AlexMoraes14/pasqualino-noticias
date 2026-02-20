@@ -1,8 +1,13 @@
 <?php
+declare(strict_types=1);
+
 require_once __DIR__ . '/../config/config.php';
 
+const CNP_IA_MAX_INPUT_CHARS = 12000;
+const CNP_HF_MAX_TOKENS = 1200;
+
 /**
- * Função principal chamada pelo publicador
+ * Funcao principal chamada pelo publicador.
  */
 function reformularNoticia($html)
 {
@@ -10,34 +15,14 @@ function reformularNoticia($html)
         return $html;
     }
 
-    // 1. Separa tabelas do HTML
     preg_match_all('/<table.*?>.*?<\/table>/is', $html, $matches);
     $tabelas = $matches[0] ?? [];
 
-    // Remove tabelas do texto
-    $textoLimpo = preg_replace('/<table.*?>.*?<\/table>/is', '', $html);
+    $textoSemTabelas = preg_replace('/<table.*?>.*?<\/table>/is', '', $html);
+    $textoLimpo = strip_tags((string) $textoSemTabelas);
+    $textoLimpo = preg_replace('/\s+/u', ' ', trim((string) $textoLimpo));
+    $textoLimpo = cnp_limitar_texto_por_frase((string) $textoLimpo, CNP_IA_MAX_INPUT_CHARS);
 
-    // Formatação de texto
-    $textoLimpo = strip_tags($textoLimpo);
-
-    // corta respeitando frases
-    $limite = 2500;
-
-    if (mb_strlen($textoLimpo) > $limite) {
-        $textoCortado = mb_substr($textoLimpo, 0, $limite);
-
-        // garante que termina em ponto final
-        $ultimoPonto = mb_strrpos($textoCortado, '.');
-
-        if ($ultimoPonto !== false) {
-            $textoLimpo = mb_substr($textoCortado, 0, $ultimoPonto + 1);
-        } else {
-            $textoLimpo = $textoCortado;
-        }
-    }
-
-
-    // 2. Reformula TEXTO (sem tabela)
     if (IA_PROVIDER === 'openai' && OPENAI_API_KEY !== '') {
         $textoReformulado = reformularComOpenAI($textoLimpo);
     } elseif (IA_PROVIDER === 'huggingface' && HF_API_KEY !== '') {
@@ -46,37 +31,113 @@ function reformularNoticia($html)
         $textoReformulado = $textoLimpo;
     }
 
-    // 3. Reanexa tabelas NO FINAL
+    $textoReformulado = cnp_validar_texto_reformulado($textoLimpo, $textoReformulado);
+
     if (!empty($tabelas)) {
         $textoReformulado .= "\n\n<h3>Dados complementares</h3>";
-
         foreach ($tabelas as $tabela) {
             $textoReformulado .= "\n\n" . $tabela;
         }
     }
 
-    // 4. Fonte obrigatória
-    //$textoReformulado .=
-       // '<br><br><em>Conteúdo reformulado automaticamente com apoio de IA.<br>
-       // Fonte original: Econet Editora.</em>';
-
     return $textoReformulado;
 }
 
-
-/**
- * Extrai tabelas do HTML e coloca placeholder
- */
-function separarTabelas($html)
+function cnp_limitar_texto_por_frase(string $texto, int $limite): string
 {
-    $tabelas = [];
-
-    if (preg_match_all('/<table.*?>.*?<\/table>/is', $html, $matches)) {
-        $tabelas = $matches[0];
-        $html = preg_replace('/<table.*?>.*?<\/table>/is', '[TABELA_AQUI]', $html);
+    $texto = trim($texto);
+    if ($texto === '' || mb_strlen($texto) <= $limite) {
+        return $texto;
     }
 
-    return [$html, $tabelas];
+    $textoCortado = mb_substr($texto, 0, $limite);
+    $ultimoPonto = mb_strrpos($textoCortado, '.');
+
+    if ($ultimoPonto !== false) {
+        return trim(mb_substr($textoCortado, 0, $ultimoPonto + 1));
+    }
+
+    return trim($textoCortado);
+}
+
+function cnp_prompt_reescrita(string $texto): string
+{
+    return
+        "Reescreva a noticia abaixo com linguagem jornalistica propria, "
+        . "sem copiar a estrutura original, sem resumir e sem omitir informacoes. "
+        . "Mantenha todos os dados, numeros, datas e contexto. "
+        . "Mantenha extensao semelhante ao texto original. "
+        . "Nao use Markdown (sem **, sem ### e sem listas markdown). "
+        . "Nao invente fatos.\n\n"
+        . $texto;
+}
+
+function cnp_extract_openai_generated_text($data): ?string
+{
+    if (!is_array($data)) {
+        return null;
+    }
+
+    $finishReason = (string) ($data['choices'][0]['finish_reason'] ?? '');
+    if (in_array($finishReason, ['length', 'max_tokens'], true)) {
+        return null;
+    }
+
+    if (isset($data['choices'][0]['message']['content']) && is_string($data['choices'][0]['message']['content'])) {
+        return $data['choices'][0]['message']['content'];
+    }
+
+    return null;
+}
+
+function cnp_normalizar_marcacao_markdown(string $texto): string
+{
+    $texto = preg_replace('/(^|[\r\n>])\s{0,3}#{1,6}\s+/u', '$1', $texto);
+    $texto = preg_replace('/\*\*([^*]+?)\*\*/u', '$1', $texto);
+    $texto = str_replace('**', '', (string) $texto);
+
+    return trim((string) $texto);
+}
+
+function cnp_resposta_parece_truncada(string $texto): bool
+{
+    $texto = trim($texto);
+    if ($texto === '') {
+        return true;
+    }
+
+    if (preg_match('/[,:;\-]$/u', $texto) === 1) {
+        return true;
+    }
+
+    if (preg_match('/\b(de|da|do|das|dos|e|ou|para|com|sem|em|por|que|como)\s*$/iu', $texto) === 1) {
+        return true;
+    }
+
+    return false;
+}
+
+function cnp_validar_texto_reformulado(string $original, string $gerado): string
+{
+    $original = trim($original);
+    $gerado = cnp_normalizar_marcacao_markdown(trim($gerado));
+
+    if ($gerado === '') {
+        return $original;
+    }
+
+    $lenOriginal = mb_strlen($original);
+    $lenGerado = mb_strlen($gerado);
+
+    if ($lenOriginal >= 1600 && $lenGerado < (int) floor($lenOriginal * 0.55)) {
+        return $original;
+    }
+
+    if (cnp_resposta_parece_truncada($gerado)) {
+        return $original;
+    }
+
+    return $gerado;
 }
 
 /* ===============================
@@ -84,30 +145,24 @@ function separarTabelas($html)
 ================================ */
 function reformularComOpenAI($texto)
 {
-    $prompt =
-        "Reescreva a notícia abaixo com linguagem jornalística própria, "
-        . "sem copiar a estrutura original, mantendo o sentido. "
-        . "Finalize com: Fonte: Econet Editora — informações adaptadas.\n\n"
-        . $texto;
-
     $payload = [
         'model' => 'gpt-4o-mini',
         'messages' => [
-            ['role' => 'system', 'content' => 'Você é um redator jornalístico profissional.'],
-            ['role' => 'user', 'content' => $prompt]
+            ['role' => 'system', 'content' => 'Voce e um redator jornalistico profissional.'],
+            ['role' => 'user', 'content' => cnp_prompt_reescrita((string) $texto)],
         ],
-        'temperature' => 0.7
+        'temperature' => 0.5,
     ];
 
     return callApi(
         'https://api.openai.com/v1/chat/completions',
         [
             'Authorization: Bearer ' . OPENAI_API_KEY,
-            'Content-Type: application/json'
+            'Content-Type: application/json',
         ],
         $payload,
-        fn ($data) => $data['choices'][0]['message']['content'] ?? null,
-        $texto
+        'cnp_extract_openai_generated_text',
+        (string) $texto
     );
 }
 
@@ -116,20 +171,14 @@ function reformularComOpenAI($texto)
 ================================ */
 function reformularComHuggingFace($texto)
 {
-    $prompt =
-        "Reescreva a notícia abaixo com linguagem jornalística própria, "
-        . "sem copiar a estrutura original, mantendo o sentido. "
-        . "Finalize com: Fonte: Econet Editora — informações adaptadas.\n\n"
-        . $texto;
-
     $payload = [
         'model' => (string) HF_MODEL,
         'messages' => [
-            ['role' => 'system', 'content' => 'VocÃª Ã© um redator jornalÃ­stico profissional.'],
-            ['role' => 'user', 'content' => $prompt],
+            ['role' => 'system', 'content' => 'Voce e um redator jornalistico profissional.'],
+            ['role' => 'user', 'content' => cnp_prompt_reescrita((string) $texto)],
         ],
-        'temperature' => 0.6,
-        'max_tokens' => 400,
+        'temperature' => 0.5,
+        'max_tokens' => CNP_HF_MAX_TOKENS,
         'stream' => false,
     ];
 
@@ -137,11 +186,11 @@ function reformularComHuggingFace($texto)
         cnp_hf_chat_completions_url(),
         [
             'Authorization: Bearer ' . HF_API_KEY,
-            'Content-Type: application/json'
+            'Content-Type: application/json',
         ],
         $payload,
         'cnp_extract_hf_generated_text',
-        $texto
+        (string) $texto
     );
 }
 
@@ -153,6 +202,11 @@ function cnp_hf_chat_completions_url(): string
 function cnp_extract_hf_generated_text($data): ?string
 {
     if (!is_array($data)) {
+        return null;
+    }
+
+    $finishReason = (string) ($data['choices'][0]['finish_reason'] ?? '');
+    if (in_array($finishReason, ['length', 'max_tokens'], true)) {
         return null;
     }
 
@@ -176,25 +230,38 @@ function cnp_extract_hf_generated_text($data): ?string
 }
 
 /* ===============================
-   CURL GENÉRICO
+   CURL GENERICO
 ================================ */
 function callApi($url, $headers, $payload, $extractor, $fallback)
 {
+    @set_time_limit(0);
+
     $verifySsl = !defined('IA_DISABLE_SSL_VERIFY') || IA_DISABLE_SSL_VERIFY !== true;
+    $jsonPayload = json_encode($payload, JSON_UNESCAPED_UNICODE);
+    if (!is_string($jsonPayload) || $jsonPayload === '') {
+        return $fallback;
+    }
 
     $ch = curl_init($url);
     curl_setopt_array($ch, [
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_POST => true,
         CURLOPT_HTTPHEADER => $headers,
-        CURLOPT_POSTFIELDS => json_encode($payload),
-        CURLOPT_TIMEOUT => 60,
+        CURLOPT_POSTFIELDS => $jsonPayload,
+        CURLOPT_CONNECTTIMEOUT => IA_CONNECT_TIMEOUT,
+        CURLOPT_TIMEOUT => IA_HTTP_TIMEOUT,
         CURLOPT_SSL_VERIFYPEER => $verifySsl,
         CURLOPT_SSL_VERIFYHOST => $verifySsl ? 2 : 0,
     ]);
 
     $response = curl_exec($ch);
     if ($response === false) {
+        curl_close($ch);
+        return $fallback;
+    }
+
+    $httpCode = (int) curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
+    if ($httpCode >= 400) {
         curl_close($ch);
         return $fallback;
     }
